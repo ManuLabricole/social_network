@@ -35,6 +35,8 @@ venv.bak/
 
 # When using tailwindcss
 /public/css
-```
+/public/js
 
+# For axios
+/public/api
 
