@@ -5,14 +5,10 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import axios from 'axios'
-
-// set the axios base url for a typical Django REST API
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api/'
 
 const app = createApp(App)
 
 app.use(createPinia())
-app.use(router, axios)
+app.use(router)
 
 app.mount('#app')
