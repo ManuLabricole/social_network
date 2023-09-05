@@ -1,2 +1,2 @@
 # social_network
-Django Rest - vue.js - tailwind css
+Full Stack application last tutorial before starting a personal one
