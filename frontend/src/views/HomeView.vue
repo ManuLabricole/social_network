@@ -1,9 +1,23 @@
-<script setup>
-import NavigationBar from '../components/NavigationBar.vue';
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'HomeView',
+    components: {
+      
+    },
+    setup() {
+      return {
+        
+      }
+    }
+  }
 </script>
 
-<template>
-  <NavigationBar />
-  <main class="px-8 py-6 bg-gray-100">
-  </main>
-</template>
+<style lang="postcss" scoped>
+
+</style>
