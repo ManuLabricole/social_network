@@ -10,7 +10,9 @@
 					>
 				</div>
 
-				<div class="menu-center flex space-x-12">
+				<div
+					v-if="isAuthenticated"
+					class="menu-center flex space-x-12">
 					<a
 						href="#"
 						class="text-purple-700">
@@ -75,11 +77,25 @@
 				</div>
 
 				<div class="menu-right">
-					<a href="#">
+					<a
+						v-if="isAuthenticated"
+						href="#">
 						<img
 							src="https://i.pravatar.cc/40?img=70"
 							class="rounded-full" />
 					</a>
+					<template v-else>
+						<RouterLink
+							to="/login"
+							class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg"
+							>Log in</RouterLink
+						>
+						<RouterLink
+							to="/signup"
+							class="py-4 px-6 bg-purple-600 text-white rounded-lg"
+							>Sign up</RouterLink
+						>
+					</template>
 				</div>
 			</div>
 		</div>
@@ -89,5 +105,8 @@
 <script>
 	export default {
 		name: 'NavigationBar',
+		props: {
+			isAuthenticated: Boolean, // Assuming it's a boolean value
+		},
 	};
 </script>
