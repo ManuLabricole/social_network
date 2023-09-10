@@ -39,7 +39,7 @@ def signup(request):
         JsonResponse: JSON response indicating success or error.
     """
     data = request.data  # Extract data from the HTTP request.
-
+    print(data)
     # Create a form instance with the provided data for validation.
     form = SignupForm({
         # Get the email address from the data.
@@ -61,6 +61,7 @@ def signup(request):
     else:
         # If the form is not valid, there was an error during registration.
         message = 'error'
+        
 
     # Return a JSON response indicating success or error.
-    return JsonResponse({'message': message})
+    return JsonResponse({'message': message, 'errors': form.errors})

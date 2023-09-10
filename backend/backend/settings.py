@@ -56,7 +56,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ]
 }
-
+print(os.environ['FRONTEND_URL'])
 CORS_ALLOWED_ORIGINS = [
     os.environ['FRONTEND_URL'],
 ]

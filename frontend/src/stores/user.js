@@ -55,6 +55,7 @@ export const useUserStore = defineStore('user', {
         },
 
         // Action to remove user authentication tokens and clear user data.
+        // Call when we logout.
         removeToken() {
             console.log('removeToken')
 
@@ -104,6 +105,7 @@ export const useUserStore = defineStore('user', {
                     localStorage.setItem('user.access', response.data.access)
 
                     // Set the authorization header for Axios to use the new access token.
+                    // Mind the space after "Bearer"!
                     axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
                 })
                 .catch((error) => {
