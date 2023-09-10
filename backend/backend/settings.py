@@ -12,17 +12,18 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv # ignore this line if you don't have python-dotenv installed
 import os
-import dotenv  # <- New
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
 # Add .env variables anywhere before SECRET_KEY
 dotenv_file = os.path.join(BASE_DIR, ".env")
 
 if os.path.isfile(dotenv_file):
-    dotenv.load_dotenv(dotenv_file)
+    load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
