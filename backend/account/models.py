@@ -109,7 +109,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_login = models.DateTimeField(blank=True, null=True)
 
     # Custom user manager to manage user creation and querying.
-    objects = CustomUserManager() # When querying the database, use this manager : user.objects.all() 
+    # When querying the database, use this manager : user.objects.all()
+    objects = CustomUserManager()
 
     # The field used as the username for authentication (email in this case).
     USERNAME_FIELD = 'email'
@@ -120,4 +121,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Fields that are required when creating a user (none in this case).
     REQUIRED_FIELDS = []
 
-    # Additional methods, properties, or customization can be added here.
+    # Add related names to avoid clashes with auth.User
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        related_name='user_set_custom'
+    )
+
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        related_name='user_set_custom'
+    )
