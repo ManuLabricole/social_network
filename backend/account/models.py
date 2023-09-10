@@ -7,7 +7,7 @@ from django.contrib.auth.models import UserManager
 
 
 class CustomUserManager(UserManager):
-    def _create_user(self, email, password, **extra_fields):
+    def _create_user(self, name, email, password, **extra_fields):
         """
         Create and save a user with the given email and password.
 
@@ -29,7 +29,7 @@ class CustomUserManager(UserManager):
         email = self.normalize_email(email)
 
         # Create a new user instance with the provided email and extra fields.
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, name=name, **extra_fields)
 
         # Set the user's password using Django's password hashing mechanism.
         user.set_password(password)
@@ -40,11 +40,12 @@ class CustomUserManager(UserManager):
         # Return the created user instance.
         return user
 
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, name=None, email=None, password=None, **extra_fields):
         """
         Create a standard user with the given email and password.
 
         Args:
+            name (str): The name of the user.
             email (str): The email address of the user.
             password (str, optional): The user's password.
             **extra_fields: Additional fields to set on the user model.
@@ -56,13 +57,14 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_superuser', False)
 
         # Call the _create_user method to create and save the user.
-        return self._create_user(email, password, **extra_fields)
+        return self._create_user(name, email, password, **extra_fields)
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, name=None, email=None, password=None, **extra_fields):
         """
         Create a superuser with the given email and password.
 
         Args:
+            name (str): The name of the superuser.
             email (str): The email address of the superuser.
             password (str, optional): The superuser's password.
             **extra_fields: Additional fields to set on the user model.
@@ -74,7 +76,7 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_superuser', True)
 
         # Call the _create_user method to create and save the superuser.
-        return self._create_user(email, password, **extra_fields)
+        return self._create_user(name, email, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
