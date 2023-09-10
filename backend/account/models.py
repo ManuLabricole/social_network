@@ -121,17 +121,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Fields that are required when creating a user (none in this case).
     REQUIRED_FIELDS = []
 
-    # Add related names to avoid clashes with auth.User
-    groups = models.ManyToManyField(
-        'auth.Group',
-        verbose_name='groups',
-        blank=True,
-        related_name='user_set_custom'
-    )
 
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        verbose_name='user permissions',
-        blank=True,
-        related_name='user_set_custom'
-    )
+    # No need to add those mline if you add AUTH_USER_MODEL in settings.py
+    # # Add related names to avoid clashes with auth.User
+    # groups = models.ManyToManyField(
+    #     'auth.Group',
+    #     verbose_name='groups',
+    #     blank=True,
+    #     related_name='user_set_custom'
+    # )
+
+    # user_permissions = models.ManyToManyField(
+    #     'auth.Permission',
+    #     verbose_name='user permissions',
+    #     blank=True,
+    #     related_name='user_set_custom'
+    # )
