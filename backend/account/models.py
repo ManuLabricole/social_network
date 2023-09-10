@@ -85,10 +85,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     # The user's email address, which must be unique.
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, blank=False, null=False)
 
     # The user's name, which is optional.
-    name = models.CharField(max_length=255, blank=True, default='')
+    name = models.CharField(max_length=255, blank=False, null=False)
 
     # The user's avatar, which can be an uploaded image.
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
@@ -109,7 +109,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_login = models.DateTimeField(blank=True, null=True)
 
     # Custom user manager to manage user creation and querying.
-    objects = CustomUserManager()
+    objects = CustomUserManager() # When querying the database, use this manager : user.objects.all() 
 
     # The field used as the username for authentication (email in this case).
     USERNAME_FIELD = 'email'
