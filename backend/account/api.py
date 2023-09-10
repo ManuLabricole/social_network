@@ -65,3 +65,4 @@ def signup(request):
 
     # Return a JSON response indicating success or error.
     return JsonResponse({'message': message, 'errors': form.errors})
+

@@ -89,6 +89,5 @@
 <script>
 	export default {
 		name: 'NavigationBar',
-		// ... other component options
 	};
 </script>

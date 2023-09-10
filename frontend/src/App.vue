@@ -22,7 +22,7 @@
 			};
 		},
 
-	components: {
+		components: {
 			NavigationBar,
 			Toast,
 		},
