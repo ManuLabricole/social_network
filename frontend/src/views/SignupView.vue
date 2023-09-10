@@ -84,13 +84,15 @@
 
 <script>
 	import axios from 'axios';
-
 	import { useToastStore } from '@/stores/toast';
 
 	export default {
 		setup() {
 			const toastStore = useToastStore();
-			return { toastStore };
+
+			return {
+				toastStore,
+			};
 		},
 
 		data() {
@@ -108,52 +110,35 @@
 		methods: {
 			submitForm() {
 				this.errors = [];
-
-				if (this.form.email === '') {
-					this.errors.push('Your e-mail is missing');
-				}
-
-				if (this.form.name === '') {
-					this.errors.push('Your name is missing');
-				}
-
-				if (this.form.password1 === '') {
-					this.errors.push('Your password is missing');
-				}
-
-				if (this.form.password1 !== this.form.password2) {
-					this.errors.push('The password does not match');
-				}
-
 				if (this.errors.length === 0) {
 					axios
 						.post('/api/v1/signup/', this.form)
 						.then((response) => {
-							console.log('response', response);
 							if (response.data.message === 'success') {
+								console.log('toastTest success');
 								this.toastStore.showToast(
 									5000,
 									'The user is registered. Please log in',
 									'bg-emerald-500'
 								);
 
-								this.form.email = '';
 								this.form.name = '';
+								this.form.email = '';
 								this.form.password1 = '';
 								this.form.password2 = '';
 							} else {
+								console.log('toastTest wrong');
 								this.toastStore.showToast(
 									5000,
 									'Something went wrong. Please try again',
 									'bg-red-300'
 								);
-								this.errors.push(response.data.errors)
+								this.errors.push(response.data.errors);
 							}
 						})
 						.catch((error) => {
 							console.log('error', error);
 						});
-					console.log('POST REQUEST');
 				}
 			},
 		},

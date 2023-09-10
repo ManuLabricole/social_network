@@ -42,7 +42,9 @@
 					</div>
 
 					<div>
-						<button class="py-4 px-6 bg-purple-600 text-white rounded-lg">
+						<button 
+						
+						class="py-4 px-6 bg-purple-600 text-white rounded-lg">
 							Log in
 						</button>
 					</div>
@@ -51,3 +53,30 @@
 		</div>
 	</div>
 </template>
+
+<script>
+import axios from 'axios';
+export default {
+	data() {
+		return {
+			form: {
+				email: '',
+				password: '',
+			},
+		};
+	},
+	methods: {
+		submitForm() {
+			axios
+				.post('/api/v1/login/', this.form)
+				.then((response) => {
+					console.log(response);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+	},
+};
+
+</script>
