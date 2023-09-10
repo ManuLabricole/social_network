@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionManager, PermissionsMixin, UserManager
+from django.utils import timezone
 
 
 from django.contrib.auth.models import UserManager
@@ -80,20 +81,43 @@ class CustomUserManager(UserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    # A unique UUID identifier for the user.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    # The user's email address, which must be unique.
     email = models.EmailField(unique=True)
+
+    # The user's name, which is optional.
     name = models.CharField(max_length=255, blank=True, default='')
+
+    # The user's avatar, which can be an uploaded image.
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
 
+    # Indicates whether the user is active (can log in) or not.
     is_active = models.BooleanField(default=True)
+
+    # Indicates whether the user has superuser privileges.
     is_superuser = models.BooleanField(default=False)
+
+    # Indicates whether the user is a staff member (e.g., admin).
     is_staff = models.BooleanField(default=False)
 
+    # The date and time when the user joined.
     date_joined = models.DateTimeField(default=timezone.now)
+
+    # The date and time of the user's last login.
     last_login = models.DateTimeField(blank=True, null=True)
 
+    # Custom user manager to manage user creation and querying.
     objects = CustomUserManager()
 
+    # The field used as the username for authentication (email in this case).
     USERNAME_FIELD = 'email'
+
+    # The field to use for the email address.
     EMAIL_FIELD = 'email'
+
+    # Fields that are required when creating a user (none in this case).
     REQUIRED_FIELDS = []
+
+    # Additional methods, properties, or customization can be added here.
