@@ -53,7 +53,7 @@ def signup(request):
 
     if form.is_valid():
         # If the form is valid, save the user registration data.
-        form.save()
+        form.save()  # Save the user to the database. This should commit the change
         message = 'success'
 
         # Additional logic to send a verification email can be added here.
