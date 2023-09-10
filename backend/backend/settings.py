@@ -13,8 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-import dotenv # <- New
-
+import dotenv  # <- New
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,7 +42,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=180),
     'ROTATE_REFRESH_TOKENS': False,
-}  
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -54,6 +53,14 @@ REST_FRAMEWORK = {
     ]
 }
 
+CORS_ALLOWED_ORIGINS = [
+    os.environ['FRONTEND_URL'],
+]
+
+CRSF_TRUSTED_ORIGINS = [
+    os.environ['FRONTEND_URL'],
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -63,11 +70,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_rest_framework',
     'django_rest_framework_simplejwt',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware'
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
