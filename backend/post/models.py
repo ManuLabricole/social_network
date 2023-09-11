@@ -6,6 +6,8 @@ from account.models import User
 
 
 class PostAttachment(models.Model):
+    def __str__(self):
+        return str(self.id)
     # Unique identifier for each attachment.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -21,6 +23,8 @@ class PostAttachment(models.Model):
 
 
 class Post(models.Model):
+    def __str__(self):
+        return self.title 
     # Unique identifier for each post.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -38,7 +42,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     # Many-to-many relationship with PostAttachment for including attachments with the post.
-    attachement = models.ManyToManyField(
+    attachment = models.ManyToManyField(
         PostAttachment, related_name='post_attachments', blank=True)
 
     # To be added in the future:
