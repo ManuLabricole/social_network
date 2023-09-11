@@ -5,7 +5,7 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('api/v1/', include('account.urls')),
-    path('api/v1/', include('post.urls')),
+    path('api/v1/posts/', include('post.urls')),
     path('admin/', admin.site.urls),
     # Redirect '/' to 'api/v1/Home'
 ]
