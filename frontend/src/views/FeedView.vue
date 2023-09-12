@@ -158,6 +158,7 @@
 					.then((response) => {
 						console.log(response);
 						this.body = '';
+						this.posts.unshift(response.data);
 					})
 					.catch((error) => {
 						console.error(error);
