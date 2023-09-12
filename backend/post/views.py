@@ -28,7 +28,3 @@ def post_create(request):
         serializer = PostSerializer(post)
         return JsonResponse(serializer.data)
         
-    else:
-        return JsonResponse({'status': 'error'})
-
-    return JsonResponse({'status': 'ok'})
