@@ -119,11 +119,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
 
     # Fields that are required when creating a user (none in this case).
-    REQUIRED_FIELDS = []
-    
+    REQUIRED_FIELDS = ['name']
+
     def __str__(self):
         return self.email
-
 
     # No need to add those mline if you add AUTH_USER_MODEL in settings.py
     # # Add related names to avoid clashes with auth.User
