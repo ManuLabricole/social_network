@@ -153,7 +153,7 @@
 			createPost() {
 				axios
 					.post('/api/v1/posts/create/', {
-						body: this.body,
+						body: this.postBody,
 					})
 					.then((response) => {
 						console.log(response);
