@@ -44,7 +44,7 @@
 							class="w-[40px] rounded-full" />
 
 						<p>
-							<strong>{{ post.title }}</strong>
+							<strong>{{ post.user.id }}</strong>
 						</p>
 					</div>
 					<p class="text-gray-600">18 minutes ago</p>
