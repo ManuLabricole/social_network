@@ -25,6 +25,9 @@ def post_create(request):
         post.author = request.user
         post.save()
         
+        serializer = PostSerializer(post)
+        return JsonResponse(serializer.data)
+        
     else:
         return JsonResponse({'status': 'error'})
 
