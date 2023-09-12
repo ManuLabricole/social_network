@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-from dotenv import load_dotenv # ignore this line if you don't have python-dotenv installed
+# ignore this line if you don't have python-dotenv installed
+from dotenv import load_dotenv
 
 import os
 
@@ -72,12 +73,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account',
+
+    # Specific Modules
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-    
-    
+
+    # Specific Apps
+    'account',
+    'post',
+
+
 ]
 
 MIDDLEWARE = [
