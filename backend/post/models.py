@@ -24,7 +24,7 @@ class PostAttachment(models.Model):
 
 class Post(models.Model):
     def __str__(self):
-        return self.title 
+        return self.title
     # Unique identifier for each post.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -44,6 +44,9 @@ class Post(models.Model):
     # Many-to-many relationship with PostAttachment for including attachments with the post.
     attachment = models.ManyToManyField(
         PostAttachment, related_name='post_attachments', blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     # To be added in the future:
     # - Likes: To track users who liked this post.
