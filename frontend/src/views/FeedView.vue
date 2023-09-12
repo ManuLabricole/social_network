@@ -15,23 +15,28 @@
 		</div>
 		<div class="main-center col-span-2 space-y-4">
 			<div class="bg-white border border-gray-200 rounded-lg">
-				<div class="p-4">
-					<textarea
-						class="p-4 w-full bg-gray-100 rounded-lg"
-						placeholder="What are you thinking about?"></textarea>
-				</div>
-				<div class="p-4 border-t border-gray-100 flex justify-between">
-					<a
-						href="#"
-						class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
-						>Attach image</a
-					>
-					<a
-						href="#"
-						class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
-						>Post</a
-					>
-				</div>
+				<form
+					method="post"
+					v-on:submit.prevent="createPost">
+					<div class="p-4">
+						<textarea
+							class="p-4 w-full bg-gray-100 rounded-lg"
+							v-model="postBody"
+							placeholder="What are you thinking about?"></textarea>
+					</div>
+					<div class="p-4 border-t border-gray-100 flex justify-between">
+						<a
+							href="#"
+							class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg"
+							>Attach image</a
+						>
+						<button
+							href="#"
+							class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
+							>Post</button>
+						
+					</div>
+				</form>
 			</div>
 			<div
 				class="p-4 bg-white border border-gray-200 rounded-lg"
@@ -44,7 +49,7 @@
 							class="w-[40px] rounded-full" />
 
 						<p>
-							<strong>{{ post.user.id }}</strong>
+							<strong>{{ post.author.name }}</strong>
 						</p>
 					</div>
 					<p class="text-gray-600">18 minutes ago</p>
@@ -53,7 +58,7 @@
 					src="https://images.unsplash.com/photo-1661956602868-6ae368943878?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80"
 					class="w-full rounded-lg" />
 				<p>{{ post.body }}</p>
-					<div class="my-6 flex justify-between">
+				<div class="my-6 flex justify-between">
 					<div class="flex space-x-6">
 						<div class="flex items-center space-x-2">
 							<svg
@@ -126,6 +131,7 @@
 		data() {
 			return {
 				posts: [],
+				postBody: '',
 			};
 		},
 		mounted() {
@@ -140,7 +146,22 @@
 						this.posts = response.data;
 					})
 					.catch((error) => {
-						console.log(error);
+						console.error(error);
+						console.warn('Error getting feed');
+					});
+			},
+			createPost() {
+				axios
+					.post('/api/v1/posts/create/', {
+						body: this.body,
+					})
+					.then((response) => {
+						console.log(response);
+						this.body = '';
+					})
+					.catch((error) => {
+						console.error(error);
+						console.warn('Error creating post');
 					});
 			},
 		},
