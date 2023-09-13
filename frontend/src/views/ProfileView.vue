@@ -123,7 +123,7 @@
 	import Trends from '../components/Trends.vue';
 	import axios from 'axios';
 	export default {
-		name: 'FeedView',
+		name: 'ProfileView',
 		components: {
 			PeopleYouMainKnow,
 			Trends,
