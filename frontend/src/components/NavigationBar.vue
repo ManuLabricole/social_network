@@ -77,13 +77,13 @@
 				</div>
 
 				<div class="menu-right">
-					<a
-						v-if="isAuthenticated"
-						href="#">
-						<img
-							src="https://i.pravatar.cc/40?img=70"
-							class="rounded-full" />
-					</a>
+					<template v-if="isAuthenticated">
+						<router-link :to="{ name: 'profile', params: { id: user.id } }">
+							<img
+								src="https://i.pravatar.cc/40?img=70"
+								class="rounded-full" />
+						</router-link>
+					</template>
 					<template v-else>
 						<RouterLink
 							to="/login"
@@ -106,7 +106,19 @@
 	export default {
 		name: 'NavigationBar',
 		props: {
-			isAuthenticated: Boolean, // Assuming it's a boolean value
+			userStore: {
+				type: Object,
+				required: true,
+			},
+		},
+		setup(props) {
+			const user = props.userStore.user;
+			const isAuthenticated = props.userStore.user.isAuthenticated;
+
+			return {
+				user,
+				isAuthenticated,
+			};
 		},
 	};
 </script>
