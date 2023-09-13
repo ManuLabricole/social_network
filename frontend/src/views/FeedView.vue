@@ -16,8 +16,22 @@
 		<div class="main-center col-span-2 space-y-4">
 			<div class="bg-white border border-gray-200 rounded-lg">
 				<form
+					class="space-y-1"
 					method="post"
 					v-on:submit.prevent="createPost">
+					<div class="p-4">
+						<input
+							type="text"
+							class="p-4 w-50 h-4 bg-gray-100 rounded-full"
+							v-model="postTitle"
+							placeholder="add a title"
+							maxlength="50" />
+					</div>
+					<div
+						v-if="titleError"
+						class="text-red-500 mt-2">
+						{{ titleError }}
+					</div>
 					<div class="p-4">
 						<textarea
 							class="p-4 w-full bg-gray-100 rounded-lg"
@@ -32,9 +46,9 @@
 						>
 						<button
 							href="#"
-							class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
-							>Post</button>
-						
+							class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">
+							Post
+						</button>
 					</div>
 				</form>
 			</div>
@@ -52,7 +66,7 @@
 							<strong>{{ post.author.name }}</strong>
 						</p>
 					</div>
-					<p class="text-gray-600">18 minutes ago</p>
+					<p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
 				</div>
 				<img
 					src="https://images.unsplash.com/photo-1661956602868-6ae368943878?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80"
@@ -132,6 +146,8 @@
 			return {
 				posts: [],
 				postBody: '',
+				postTitle: '',
+				titleError: '',
 			};
 		},
 		mounted() {
@@ -152,7 +168,8 @@
 			},
 			createPost() {
 				axios
-					.post('/api/v1/posts/create/', {
+					.post('/api/v1/posts/', {
+						title: this.postTitle,
 						body: this.postBody,
 					})
 					.then((response) => {
@@ -161,8 +178,8 @@
 						this.posts.unshift(response.data);
 					})
 					.catch((error) => {
-						console.error(error);
-						console.warn('Error creating post');
+						console.error('ERROR', error);
+						this.titleError = error.response.data.title[0];
 					});
 			},
 		},

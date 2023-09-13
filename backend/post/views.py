@@ -8,23 +8,31 @@ from .serializers import PostSerializer
 
 from .forms import PostForm
 
+# Here we render the list of posts
 
-class PostListView(generics.ListAPIView):
+
+class PostListView(generics.ListCreateAPIView):
+    print("PostListView")
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request):
+        print("Inside create method")
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=self.request.user)
+            return JsonResponse(serializer.data, status=201)
 
-@api_view(['POST'])
-def post_create(request):
-    print(request.data)
-    print(request.user)
-    form = PostForm(request.data)
-    if form.is_valid():
-        post = form.save(commit=False)  # commit=False means that we don't want to save the form to the database yet
-        post.author = request.user
-        post.save()
-        
-        serializer = PostSerializer(post)
-        return JsonResponse(serializer.data)
-        
+        else:
+            print(serializer.errors)
+            response = JsonResponse(serializer.errors, status=400)
+            return response
+
+
+class UserPostsListView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user)
