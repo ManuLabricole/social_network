@@ -7,7 +7,7 @@
 					class="mb-6 rounded-full" />
 
 				<p>
-					<strong>{{ profileId.name }}</strong>
+					<strong>{{ profile.name }}</strong>
 				</p>
 				<div class="mt-6 flex space-x-8 justify-around">
 					<p class="text-xs text-gray-500">182 friends</p>
@@ -30,7 +30,7 @@
 							<strong>{{ post.author.name }}</strong>
 						</p>
 					</div>
-					<p class="text-gray-600">18 minutes ago</p>
+					<p class="text-gray-600">{{ post.created_at_formatted }}</p>
 				</div>
 				<div class="flex justify-center p-4 bg-white">
 					<p class="inline-block p-1 text-center font-bold rounded shadow-md">
@@ -115,12 +115,10 @@
 		},
 		setup(props) {
 			const userStore = useUserStore();
-			
 
 			return {
 				user: userStore.user, // assuming the user object in the store has an id property
 				profileId: props.id,
-				
 			};
 		},
 		props: {
@@ -133,29 +131,14 @@
 			return {
 				posts: [],
 				postBody: '',
+				profile: {},
 			};
 		},
 		mounted() {
-			if (this.profileId === this.user.id) {
-				this.getMyFeed();
-			} else {
-				this.fetchProfile();
-				this.getPostsByUserId();
-			}
+			this.fetchProfile();
+			this.getPostsByUserId();
 		},
 		methods: {
-			getMyFeed() {
-				axios
-					.get('/api/v1/posts/me')
-					.then((response) => {
-						console.log(response);
-						this.posts = response.data;
-					})
-					.catch((error) => {
-						console.error(error);
-						console.warn('Error getting feed');
-					});
-			},
 			getPostsByUserId() {
 				axios
 					.get(`/api/v1/posts/user/${this.profileId}/`)
@@ -170,10 +153,11 @@
 			},
 			fetchProfile() {
 				axios
-					.get(`/api/v1/users/${this.profileId}/`)
+					.get(`/api/v1/user/${this.profileId}/`)
 					.then((response) => {
 						console.log(response);
 						this.profile = response.data;
+						console.log(this.profile.name);
 					})
 					.catch((error) => {
 						console.error(error);

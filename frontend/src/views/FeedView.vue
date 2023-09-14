@@ -59,8 +59,7 @@
 				<div class="mb-6 flex items-center justify-between">
 					<div class="flex items-center space-x-6">
 						<router-link
-							:to="{ name: 'profile', params: { id: post.author.id } }"
-							>>
+							:to="{ name: 'profile', params: { id: post.author.id } }">
 							<img
 								src="https://i.pravatar.cc/300?img=70"
 								class="w-[40px] rounded-full" />
