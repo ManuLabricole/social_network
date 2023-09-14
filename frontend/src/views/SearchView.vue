@@ -27,13 +27,16 @@
 				<div
 					class="p-4 text-center bg-gray-100 rounded-lg"
 					v-for="author in authors">
-					<img
-						src="https://i.pravatar.cc/300?img=70"
-						class="mb-6 rounded-full" />
+					<h1 class="text-xl font-bold">{{ author.id }}</h1>
+					<router-link :to="{ name: 'profile', params: { id: author.id } }">
+						<img
+							src="https://i.pravatar.cc/300?img=70"
+							class="mb-6 rounded-full" />
 
-					<p>
-						<strong>{{ author }}</strong>
-					</p>
+						<p>
+							<strong>{{ author }}</strong>
+						</p>
+					</router-link>
 
 					<div class="mt-6 flex space-x-8 justify-around">
 						<p class="text-xs text-gray-500">182 friends</p>
@@ -42,22 +45,30 @@
 				</div>
 			</div>
 
-			<div class="p-4 bg-white border border-gray-200 rounded-lg">
+			<div
+				class="p-4 bg-white border border-gray-200 rounded-lg"
+				v-if="posts.length > 0"
+				v-for="post in posts"
+				:key="post.id">
 				<div class="mb-6 flex items-center justify-between">
-					<div class="flex items-center space-x-6">
-						<img
-							src="https://i.pravatar.cc/300?img=70"
-							class="w-[40px] rounded-full" />
+					<router-link
+						:to="{ name: 'profile', params: { id: post.author.id } }">
+						<div class="flex items-center space-x-6">
+							<img
+								src="https://i.pravatar.cc/300?img=70"
+								class="w-[40px] rounded-full" />
 
-						<p><strong>Code With Stein</strong></p>
-					</div>
+							<p>
+								<strong>{{ post.author.name }}</strong>
+							</p>
+						</div>
+					</router-link>
 
-					<p class="text-gray-600">28 minutes ago</p>
+					<p class="text-gray-600">{{ post.created_at_formatted }}</p>
 				</div>
 
 				<p>
-					This is just a random text post. This is just a random text post. This
-					is just a random text post. This is just a random text post.
+					{{ post.body }}
 				</p>
 
 				<div class="my-6 flex justify-between">
@@ -124,7 +135,6 @@
 
 <script>
 	import axios from 'axios';
-	import { set } from 'vue-demi';
 	import PeopleYouMainKnow from '../components/PeopleYouMainKnow.vue';
 	import Trends from '../components/Trends.vue';
 	export default {
@@ -152,7 +162,6 @@
 						},
 					})
 					.then((response) => {
-						console.log(response.data);
 						this.posts = response.data;
 						this.getAuthorsFromPosts();
 					})
@@ -162,14 +171,13 @@
 			},
 			getAuthorsFromPosts() {
 				// Extract unique authors from the posts
-				const authorSet = new Set();
+				const authorMap = new Set();
 				this.posts.forEach((post) => {
-					authorSet.add(post.author.name); // Assuming 'author' is the name of the field in your data
+					authorMap.set(post.author.id, post.author);
 				});
 
-				// Convert Set to Array
-				this.authors = [...authorSet];
-				console.log(authorSet);
+				// Convert Map values to Array
+				this.authors = [...authorMap.values()];
 			},
 		},
 	};
