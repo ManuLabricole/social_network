@@ -51,11 +51,11 @@
 						</button>
 					</div>
 				</form>
-				<FeedItem
-					v-for="post in posts"
-					v-bind:key="post.id"
-					v-bind:post="post" />
 			</div>
+			<FeedItem
+				v-for="post in posts"
+				v-bind:key="post.id"
+				v-bind:post="post" />
 		</div>
 		<div class="main-right col-span-1 space-y-4">
 			<PeopleYouMainKnow />
