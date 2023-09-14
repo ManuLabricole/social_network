@@ -7,7 +7,7 @@
 					class="mb-6 rounded-full" />
 
 				<p>
-					<strong>{{ user.name }}</strong>
+					<strong>{{ profileId.name }}</strong>
 				</p>
 				<div class="mt-6 flex space-x-8 justify-around">
 					<p class="text-xs text-gray-500">182 friends</p>
@@ -115,12 +115,12 @@
 		},
 		setup(props) {
 			const userStore = useUserStore();
-			console.log('PROPS', props.id);
+			
 
-			// Return the user's ID (and any other necessary data) from the setup function.
 			return {
 				user: userStore.user, // assuming the user object in the store has an id property
 				profileId: props.id,
+				
 			};
 		},
 		props: {
@@ -139,6 +139,7 @@
 			if (this.profileId === this.user.id) {
 				this.getMyFeed();
 			} else {
+				this.fetchProfile();
 				this.getPostsByUserId();
 			}
 		},
@@ -165,6 +166,18 @@
 					.catch((error) => {
 						console.error(error);
 						console.warn('Error getting feed');
+					});
+			},
+			fetchProfile() {
+				axios
+					.get(`/api/v1/users/${this.profileId}/`)
+					.then((response) => {
+						console.log(response);
+						this.profile = response.data;
+					})
+					.catch((error) => {
+						console.error(error);
+						console.warn('Error getting profile');
 					});
 			},
 		},
