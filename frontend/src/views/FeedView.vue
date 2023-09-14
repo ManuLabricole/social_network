@@ -19,7 +19,7 @@
 					class="space-y-1"
 					method="post"
 					v-on:submit.prevent="createPost">
-					<div class="p-4">
+					<div class="p-4 pb-1">
 						<input
 							type="text"
 							class="p-4 w-50 h-4 bg-gray-100 rounded-full"
@@ -29,10 +29,10 @@
 					</div>
 					<div
 						v-if="titleError"
-						class="text-red-500 mt-2">
+						class="m-4 p-4 pb-1 pt-1 gap-4 text-gray-300 bg-red-500 rounded-lg">
 						{{ titleError }}
 					</div>
-					<div class="p-4">
+					<div class="p-4 pb-1 pt-1">
 						<textarea
 							class="p-4 w-full bg-gray-100 rounded-lg"
 							v-model="postBody"
@@ -160,6 +160,7 @@
 					.then((response) => {
 						console.log(response);
 						this.posts = response.data;
+						console.log(this.posts);
 					})
 					.catch((error) => {
 						console.error(error);

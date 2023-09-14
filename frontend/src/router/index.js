@@ -5,8 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('../views/HomeView.vue')
+      redirect: '/feed'  // Redirects '/' to '/feed'
     },
     {
       path: '/signup',
