@@ -50,6 +50,7 @@ class Post(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+    @property
     def created_at_formatted(self):
         return timesince(self.created_at)
     # To be added in the future:
