@@ -31,17 +31,19 @@ class PostListView(generics.ListCreateAPIView):
         # Start with all posts
         queryset = Post.objects.all()
 
-        # Filter by search query if provided
+        # Filter by search query if provided# type: ignore
+        print(self.request.query_params)  # type: ignore
         search_query = self.request.query_params.get(  # type: ignore
-            'search', None)
+            'search_query', None)
         print("Search query:", search_query)
         if search_query:
             queryset = queryset.filter(
                 Q(title__icontains=search_query) |
-                Q(content__icontains=search_query) |
+                Q(body__icontains=search_query) |
                 # Assuming you have a username field in your user model
-                Q(author__username__icontains=search_query)
+                Q(author__name__icontains=search_query)
             )
+            return queryset
 
         # Filter by user_id if provided
         user_id = self.kwargs.get('user_id', None)
