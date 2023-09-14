@@ -32,6 +32,12 @@
 					</div>
 					<p class="text-gray-600">18 minutes ago</p>
 				</div>
+				<div class="flex justify-center p-4 bg-white">
+					<p class="inline-block p-1 text-center font-bold rounded shadow-md">
+						{{ post.title }}
+					</p>
+				</div>
+
 				<img
 					src="https://images.unsplash.com/photo-1661956602868-6ae368943878?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80"
 					class="w-full rounded-lg" />
@@ -107,13 +113,21 @@
 			PeopleYouMainKnow,
 			Trends,
 		},
-		setup() {
+		setup(props) {
 			const userStore = useUserStore();
+			console.log('PROPS', props.id);
 
 			// Return the user's ID (and any other necessary data) from the setup function.
 			return {
 				user: userStore.user, // assuming the user object in the store has an id property
+				profileId: props.id,
 			};
+		},
+		props: {
+			id: {
+				type: String,
+				required: true,
+			},
 		},
 		data() {
 			return {
@@ -122,13 +136,28 @@
 			};
 		},
 		mounted() {
-			// this.getFeed();
-			console.log('User ID:', this.user.id);
+			if (this.profileId === this.user.id) {
+				this.getMyFeed();
+			} else {
+				this.getPostsByUserId();
+			}
 		},
 		methods: {
-			getFeed() {
+			getMyFeed() {
 				axios
-					.get('/api/v1/posts')
+					.get('/api/v1/posts/me')
+					.then((response) => {
+						console.log(response);
+						this.posts = response.data;
+					})
+					.catch((error) => {
+						console.error(error);
+						console.warn('Error getting feed');
+					});
+			},
+			getPostsByUserId() {
+				axios
+					.get(`/api/v1/posts/user/${this.profileId}/`)
 					.then((response) => {
 						console.log(response);
 						this.posts = response.data;
