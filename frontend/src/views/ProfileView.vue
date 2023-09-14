@@ -105,7 +105,6 @@
 <script>
 	import PeopleYouMainKnow from '../components/PeopleYouMainKnow.vue';
 	import Trends from '../components/Trends.vue';
-	import { useUserStore } from '@/stores/user';
 	import axios from 'axios';
 	export default {
 		name: 'ProfileView',
@@ -114,10 +113,7 @@
 			Trends,
 		},
 		setup(props) {
-			const userStore = useUserStore();
-
 			return {
-				user: userStore.user, // assuming the user object in the store has an id property
 				profileId: props.id,
 			};
 		},
