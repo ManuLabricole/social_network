@@ -32,10 +32,8 @@ class PostListView(generics.ListCreateAPIView):
         queryset = Post.objects.all()
 
         # Filter by search query if provided# type: ignore
-        print(self.request.query_params)  # type: ignore
         search_query = self.request.query_params.get(  # type: ignore
             'search_query', None)
-        print("Search query:", search_query)
         if search_query:
             queryset = queryset.filter(
                 Q(title__icontains=search_query) |
