@@ -112,23 +112,32 @@
 			PeopleYouMainKnow,
 			Trends,
 		},
-		setup(props) {
-			return {
-				profileId: props.id,
-			};
-		},
 		props: {
 			id: {
 				type: String,
 				required: true,
 			},
 		},
+		setup(props) {
+			return {
+				profileId: props.id,
+			};
+		},
+
 		data() {
 			return {
 				posts: [],
 				postBody: '',
 				profile: {},
 			};
+		},
+		watch: {
+			id() {
+				this.profileId = this.id;
+				this.fetchProfile();
+				this.getPostsByUserId();
+				console.log('watching');
+			},
 		},
 		mounted() {
 			this.fetchProfile();
