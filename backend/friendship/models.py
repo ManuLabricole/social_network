@@ -22,9 +22,9 @@ class FriendRequest(models.Model):
     receiver = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name='friend_request_receiver')
     STATUS_CHOICES = (
-        ('PENDING', 'Pending'),
-        ('ACCEPTED', 'Accepted'),
-        ('DECLINED', 'Declined'),
+        ('PENDING', 'pending'),
+        ('ACCEPTED', 'accepted'),
+        ('DECLINED', 'declined'),
     )
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='PENDING')
