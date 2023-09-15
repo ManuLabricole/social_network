@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     # Specific Apps
     'account',
     'post',
+    'friendship',
 
 
 ]
