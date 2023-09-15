@@ -12,12 +12,13 @@
 					src="https://i.pravatar.cc/50?img=70"
 					class="w-10 h-10 rounded-full" />
 				<!-- Sender's Name -->
-				<p class="font-medium">{{ request }}</p>
+				<p class="font-medium">{{ request.sender.user.name }}</p>
 			</div>
 			<div class="flex space-x-2">
 				<!-- Accept Button -->
 				<button
-					class="p-2 bg-green-500 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200">
+					class="p-2 bg-green-500 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200"
+					@click="updateFriendRequest(request.id, 'ACCEPTED')">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5 text-white"
@@ -31,7 +32,8 @@
 				</button>
 				<!-- Refuse Button -->
 				<button
-					class="p-2 bg-red-500 rounded-full hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200">
+					class="p-2 bg-red-500 rounded-full hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200"
+					@click="updateFriendRequest(request.id, 'DECLINED')">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5 text-white"
@@ -73,6 +75,20 @@
 				} catch (error) {
 					console.log(error);
 				}
+			},
+			updateFriendRequest(requestId, requestType) {
+				console.log(requestId);
+				axios
+					.put(`/api/v1/friend-requests/${requestId}/`, {
+						status: requestType,
+					})
+					.then((response) => {
+						console.log(response);
+						this.fetchPendingRequests();
+					})
+					.catch((error) => {
+						console.log(error);
+					});
 			},
 		},
 		mounted() {
