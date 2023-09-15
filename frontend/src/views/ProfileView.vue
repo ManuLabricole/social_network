@@ -14,12 +14,12 @@
 					<p class="text-xs text-gray-500">120 posts</p>
 				</div>
 			</div>
-			<PendingRequests v-if="isOwnProfile" />
-			<MyFriends v-if="isOwnProfile" />
+			<PendingRequests v-if="isMyProfile" />
+			<MyFriends v-if="isMyProfile" />
 			<SendRequest
-				v-if="isFriend !== null && !isOwnProfile"
+				v-if="isLoading === false"
 				:isFriend="isFriend"
-				:friendRequestPending="friendRequestPending" />
+				:isRequestPending="isRequestPending" />
 		</div>
 		<div class="main-center col-span-2 space-y-4">
 			<FeedItem
@@ -70,11 +70,11 @@
 		data() {
 			return {
 				posts: [],
-				postBody: '',
 				profile: {},
-				isOwnProfile: false, // Add this property
+				isMyProfile: false, // Add this property
 				isFriend: null,
-				friendRequestPending: false,
+				isRequestPending: false,
+				isLoading: true,
 			};
 		},
 		watch: {
@@ -89,9 +89,9 @@
 		mounted() {
 			this.fetchProfile();
 			this.getPostsByUserId();
-			this.checkIfOwnProfile(); // Check if it's the user's own profile on mount
+			this.checkIfMyProfile(); // Check if it's the user's own profile on mount
 
-			if (!this.isOwnProfile) {
+			if (!this.isMyProfile) {
 				this.getFriendRequestStatus();
 			}
 		},
@@ -119,7 +119,7 @@
 					});
 			},
 
-			checkIfOwnProfile() {
+			checkIfMyProfile() {
 				// Compare the current user's ID with the profile's user ID
 				if (this.profileId === this.userStore.user.id) {
 					this.isOwnProfile = true;
@@ -133,10 +133,12 @@
 						console.log(response.data.response);
 						this.isFriend = response.data.response.is_friend;
 						this.isRequestPending = response.data.response.is_request_pending;
+						this.isLoading = false;
 					})
 					.catch((error) => {
 						console.error(error);
 						console.warn('Error getting relation status');
+						this.isLoading = false;
 					});
 			},
 		},

@@ -10,11 +10,14 @@
 
 		<!-- Check if request is pending, display pending icon and disable button -->
 		<div
-			v-else-if="friendRequestPending"
+			v-else-if="isRequestPending"
 			class="flex items-center space-x-1 text-gray-500">
-			<span class="material-icons"> pending </span>
-
-			<span>Pending</span>
+			<button
+				class="flex align-item py-4 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-700 opacity-50 cursor-not-allowed pointer-events-none"
+				disabled>
+				<span class="material-icons mr-4"> pending </span>
+				<span>Pending Invitation</span>
+			</button>
 		</div>
 
 		<!-- Display send icon and button if not already friends or request is not pending -->
@@ -35,17 +38,14 @@
 				type: Boolean,
 				required: true,
 			},
-			friendRequestPending: {
+			isRequestPending: {
 				type: Boolean,
 				required: true,
 			},
 		},
-
-		methods: {
-			sendFriendRequest() {
-				// Implement the logic to send a friend request
-				// You can emit an event or call a method in the parent component here
-			},
+		mounted() {
+			console.log(this.isFriend);
+			console.log(this.friendRequestPending);
 		},
 	};
 </script>
