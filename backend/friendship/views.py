@@ -9,6 +9,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 
+
 from .models import FriendRequest
 from .serializers import FriendRequestSerializer
 
@@ -17,18 +18,16 @@ class FriendRequestListView(generics.ListCreateAPIView):
     serializer_class = FriendRequestSerializer
     permission_classes = [IsAuthenticated]
 
-    def create(self, request):
-        serializer = FriendRequestSerializer(data=request.data)
-        if serializer.is_valid():
-            # Customize the serializer to set the sender as the current user
-            serializer.validated_data['sender'] = self.request.user.userprofile
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        else:
-            response = JsonResponse(serializer.errors, status=400)
-            return response
-
     def get_queryset(self):
-        user_profile = self.request.user.userprofile
-        queryset = user_profile.friendship_requests.all()
-        return queryset
+        print(self.request.query_params) # type: ignore
+        request_type = self.request.query_params.get( # type: ignore
+            'request_type', 'pending')
+        user_profile = self.request.user.userprofile  # type: ignore
+
+        if request_type == 'pending':
+            return FriendRequest.objects.filter(receiver=user_profile, status='PENDING')
+        elif request_type == 'accepted':
+            return FriendRequest.objects.filter(receiver=user_profile, status='ACCEPTED')
+        else:
+             # Default to returning pending requests or handle other cases
+            return FriendRequest.objects.filter(receiver=user_profile, status='PENDING')
