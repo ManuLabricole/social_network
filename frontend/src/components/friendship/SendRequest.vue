@@ -1,58 +1,30 @@
 <template>
 	<div class="flex items-center space-x-2">
-		<!-- Check if already friends, display rotated SVG -->
-		<svg
-			v-if="isFriend"
-			class="w-6 h-6 text-green-500 transform rotate-45"
-			fill="none"
-			stroke="currentColor"
-			viewBox="0 0 24 24"
-			xmlns="http://www.w3.org/2000/svg">
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M5 13l4 4L19 7"></path>
-		</svg>
+		<div v-if="isFriend">
+			<button
+				class="flex align-item py-4 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-700">
+				<span class="material-icons text-red-700 mr-4"> person_remove </span>
+				Remove
+			</button>
+		</div>
 
 		<!-- Check if request is pending, display pending icon and disable button -->
 		<div
 			v-else-if="isRequestPending"
 			class="flex items-center space-x-1 text-gray-500">
-			<svg
-				class="w-6 h-6"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg">
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-			</svg>
+			<span class="material-icons"> pending </span>
+
 			<span>Pending</span>
 		</div>
 
 		<!-- Display send icon and button if not already friends or request is not pending -->
-		<div
-			v-else
+		<button
+			v-if="!isFriend"
 			@click="sendFriendRequest"
-			class="cursor-pointer flex items-center space-x-1">
-			<svg
-				class="w-6 h-6 text-blue-500"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg">
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-			</svg>
-			<span class="text-blue-500">Send Request</span>
-		</div>
+			class="flex items-center inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">
+			<span class="material-icons mr-4">group_add</span>
+			Send Request
+		</button>
 	</div>
 </template>
 
@@ -68,6 +40,7 @@
 				required: true,
 			},
 		},
+
 		methods: {
 			sendFriendRequest() {
 				// Implement the logic to send a friend request

@@ -16,7 +16,9 @@
 			</div>
 			<PendingRequests v-if="isOwnProfile" />
 			<MyFriends v-if="isOwnProfile" />
-			<SendRequest :isFriend="isFriend" />
+			<SendRequest
+				v-if="isFriend !== null && !isOwnProfile"
+				:isFriend="isFriend" />
 		</div>
 		<div class="main-center col-span-2 space-y-4">
 			<FeedItem
@@ -88,7 +90,11 @@
 			this.checkIfOwnProfile(); // Check if it's the user's own profile on mount
 
 			if (!this.isOwnProfile) {
-				this.getRelationStatus();
+				this.checkIfFriend();
+
+				if (!this.isFriend) {
+					console.log();
+				}
 			}
 		},
 		methods: {
@@ -122,12 +128,11 @@
 				}
 				console.log(this.isOwnProfile);
 			},
-			async getRelationStatus() {
-				await axios
+			checkIfFriend() {
+				axios
 					.get(`/api/v1/friend-requests/check-friendship/${this.profileId}/`)
 					.then((response) => {
-						this.relationStatus = response.data.message;
-						console.log('RELATION : ', this.relationStatus);
+						this.isFriend = response.data.message;
 					})
 					.catch((error) => {
 						console.error(error);

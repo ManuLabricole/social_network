@@ -120,5 +120,14 @@
 				isAuthenticated,
 			};
 		},
+		watch: {
+			userStore: {
+				handler() {
+					this.user = this.userStore.user;
+					this.isAuthenticated = this.userStore.user.isAuthenticated;
+				},
+				deep: true,
+			},
+		},
 	};
 </script>
