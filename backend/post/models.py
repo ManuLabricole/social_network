@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from django.utils.timesince import timesince
+
 from account.models import User
 
 # Model for storing post attachments, such as images.
@@ -48,6 +50,9 @@ class Post(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+    @property
+    def created_at_formatted(self):
+        return timesince(self.created_at)
     # To be added in the future:
     # - Likes: To track users who liked this post.
     # - Likes count: To count the number of likes on this post.

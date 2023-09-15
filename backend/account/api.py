@@ -1,5 +1,9 @@
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+
 from .forms import SignupForm
 
 # A view that returns user data in JSON format
@@ -61,8 +65,6 @@ def signup(request):
     else:
         # If the form is not valid, there was an error during registration.
         message = 'error'
-        
 
     # Return a JSON response indicating success or error.
     return JsonResponse({'message': message, 'errors': form.errors})
-
