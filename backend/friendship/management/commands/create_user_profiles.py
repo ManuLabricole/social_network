@@ -2,6 +2,8 @@
 from django.core.management.base import BaseCommand
 from friendship.models import User, UserProfile
 
+# The command objective is to create a UserProfile instance for each existing User instance.
+
 
 class Command(BaseCommand):
     help = 'Create UserProfile instances for existing users'
