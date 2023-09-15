@@ -91,7 +91,7 @@ class CheckFriendshipStatus(APIView):
     def get(self, request, profile_id):
         # We access the user friends
         user_profile = self.request.user.userprofile  # type: ignore
-        print(user_profile)
+        user_id = self.request.user.id  # type: ignore
 
         friends_id = [friend.user.id for friend in user_profile.friends.all()]
         print('Friends id', friends_id)
@@ -111,9 +111,10 @@ class CheckFriendshipStatus(APIView):
             friend_request = FriendRequest.objects.filter(
                 receiver__user__id=profile_id).first()
 
-            if friend_request:
+            if friend_request and friends_id != user_id:  # type: ignore
                 print(friend_request.status)
                 response['is_friend'] = False
+                # type: ignore
                 response['is_request_pending'] = True if friend_request.status == 'PENDING' else False
 
             else:

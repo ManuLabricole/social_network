@@ -43,10 +43,23 @@
 				required: true,
 			},
 		},
-		mounted() {
-			console.log(this.isFriend);
-			console.log(this.friendRequestPending);
+		watch: {
+			isFriend() {
+				console.log('isFriend changed');
+			},
+			isRequestPending() {
+				console.log('isRequestPending changed');
+			},
 		},
+
+		mounted() {
+			console.log('isFriend', this.isFriend);
+			console.log('isRequestPending', this.isRequestPending);
+			console.log('isMyProfile', this.isMyProfile);
+			console.log('mounyted');
+		},
+
+		methods() {},
 	};
 </script>
 

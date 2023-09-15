@@ -79,11 +79,20 @@
 		},
 		watch: {
 			id() {
+				this.resetData();
 				this.profileId = this.id;
 				this.fetchProfile();
 				this.getPostsByUserId();
-				this.checkIfOwnProfile();
-				console.log('watching');
+
+				this.checkIfMyProfile();
+				if (!this.isMyProfile) {
+					console.log('Not my profile');
+					this.getFriendRequestStatus();
+				}
+				console.log('Profile ID changed');
+				console.log(this.profileId);
+				console.log(this.userStore.user.id);
+				console.log(this.isMyProfile);
 			},
 		},
 		mounted() {
@@ -122,9 +131,9 @@
 			checkIfMyProfile() {
 				// Compare the current user's ID with the profile's user ID
 				if (this.profileId === this.userStore.user.id) {
-					this.isOwnProfile = true;
+					this.isMyProfile = true;
 				}
-				console.log(this.isOwnProfile);
+				console.log(this.isMyProfile);
 			},
 			getFriendRequestStatus() {
 				axios
@@ -140,6 +149,14 @@
 						console.warn('Error getting relation status');
 						this.isLoading = false;
 					});
+			},
+			resetData() {
+				this.posts = [];
+				this.profile = {};
+				this.isMyProfile = false;
+				this.isFriend = null;
+				this.isRequestPending = false;
+				this.isLoading = true;
 			},
 		},
 	};
