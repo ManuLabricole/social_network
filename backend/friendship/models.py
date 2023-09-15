@@ -7,5 +7,20 @@ class UserProfile(models.Model):
     friends = models.ManyToManyField('self', blank=True)
     friendship_requests = models.ManyToManyField('self', blank=True)
 
-    def __str__(self) -> str:
-        return super().__str__()
+    def __str__(self):
+        return f"UserProfile - {self.user.email}"
+
+
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name='friend_request_sender')
+    receiver = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name='friend_request_receiver')
+    STATUS_CHOICES = (
+        ('PENDING', 'Pending'),
+        ('ACCEPTED', 'Accepted'),
+        ('DECLINED', 'Declined'),
+    )
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    created_at = models.DateTimeField(auto_now_add=True)
