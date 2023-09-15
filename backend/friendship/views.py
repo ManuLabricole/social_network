@@ -1,3 +1,7 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from django.views import View
 from .models import UserProfile  # Import your UserProfile model here
@@ -18,16 +22,56 @@ class FriendRequestListView(generics.ListCreateAPIView):
     serializer_class = FriendRequestSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        print(self.request.query_params) # type: ignore
-        request_type = self.request.query_params.get( # type: ignore
+    def create(self, request, *args, **kwargs):
+        sender = request.user.userprofile
+        receiver_id = request.data.get('receiver')
+        receiver = UserProfile.objects.get(id=receiver_id)
+
+        # Check if a friend request already exists
+        existing_request = FriendRequest.objects.filter(
+            sender=sender, receiver=receiver)
+        if existing_request.exists():
+            return JsonResponse({'error': 'Friend request already sent.'}, status=400)
+
+    def get_queryset(self):  # type: ignore
+        request_type = self.request.query_params.get(  # type: ignore
             'request_type', 'pending')
+
         user_profile = self.request.user.userprofile  # type: ignore
 
         if request_type == 'pending':
             return FriendRequest.objects.filter(receiver=user_profile, status='PENDING')
+
         elif request_type == 'accepted':
             return FriendRequest.objects.filter(receiver=user_profile, status='ACCEPTED')
+
         else:
-             # Default to returning pending requests or handle other cases
+            # Default to returning pending requests or handle other cases
             return FriendRequest.objects.filter(receiver=user_profile, status='PENDING')
+
+
+class UpdateFriendRequestStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+    print("hello")
+
+    def put(self, request, request_id, *args, **kwargs):
+
+        print(request.data)
+        print(request_id)
+        print(**kwargs)
+
+        new_status = request.data.get('status')
+
+        try:
+            friend_request = FriendRequest.objects.get(id=request_id)
+            print(friend_request)
+        except FriendRequest.DoesNotExist:
+            return Response({'error': 'Friend request not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if new_status not in ['ACCEPTED', 'DECLINED']:
+            return Response({'error': 'Invalid status.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        friend_request.status = new_status
+        friend_request.save()
+
+        return Response({'message': 'Status updated successfully.'}, status=status.HTTP_200_OK)
