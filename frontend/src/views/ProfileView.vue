@@ -14,7 +14,9 @@
 					<p class="text-xs text-gray-500">120 posts</p>
 				</div>
 			</div>
-			<FriendshipRequests v-if="isOwnProfile" />
+			<PendingRequests v-if="isOwnProfile" />
+			<MyFriends v-if="isOwnProfile" />
+			<SendRequest v-else />
 		</div>
 		<div class="main-center col-span-2 space-y-4">
 			<FeedItem
@@ -33,7 +35,9 @@
 	import PeopleYouMainKnow from '../components/PeopleYouMainKnow.vue';
 	import Trends from '../components/Trends.vue';
 	import FeedItem from '../components/FeedItem.vue';
-	import FriendshipRequests from '../components/FriendshipRequests.vue';
+	import PendingRequests from '../components/friendship/PendingRequests.vue';
+	import SendRequest from '../components/friendship/SendRequest.vue';
+	import MyFriends from '../components/friendship/MyFriends.vue';
 
 	import { useUserStore } from '../stores/user';
 	import axios from 'axios';
@@ -44,7 +48,9 @@
 			PeopleYouMainKnow,
 			Trends,
 			FeedItem,
-			FriendshipRequests,
+			PendingRequests,
+			SendRequest,
+			MyFriends,
 		},
 		props: {
 			id: {
@@ -79,6 +85,7 @@
 			this.fetchProfile();
 			this.getPostsByUserId();
 			this.checkIfOwnProfile(); // Check if it's the user's own profile on mount
+			this.checkIfAlreadyFriends();
 		},
 		methods: {
 			getPostsByUserId() {
@@ -109,6 +116,10 @@
 					this.isOwnProfile = true;
 				}
 				console.log(this.isOwnProfile);
+			},
+			checkIfAlreadyFriends() {
+				// Check if the current user is already friends with the profile
+				// If so, show a button to unfriend
 			},
 		},
 	};
