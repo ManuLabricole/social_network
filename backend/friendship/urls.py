@@ -8,8 +8,6 @@ urlpatterns = [
          name='requests'),
     path('<str:request_id>/',
          views.UpdateFriendRequestStatusView.as_view(), name='update'),
-    path('check-friendship/<str:profile_id>/',
+    path('check-friendship/<uuid:profile_id>/',
          views.CheckFriendshipStatus.as_view(), name='check-friendship'),
-
-
 ]

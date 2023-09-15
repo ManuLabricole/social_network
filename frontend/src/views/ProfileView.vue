@@ -16,7 +16,7 @@
 			</div>
 			<PendingRequests v-if="isOwnProfile" />
 			<MyFriends v-if="isOwnProfile" />
-			<SendRequest v-else />
+			<SendRequest :isFriend="isFriend" />
 		</div>
 		<div class="main-center col-span-2 space-y-4">
 			<FeedItem
@@ -70,6 +70,7 @@
 				postBody: '',
 				profile: {},
 				isOwnProfile: false, // Add this property
+				isFriend: null,
 			};
 		},
 		watch: {
@@ -85,20 +86,12 @@
 			this.fetchProfile();
 			this.getPostsByUserId();
 			this.checkIfOwnProfile(); // Check if it's the user's own profile on mount
-			this.checkIfAlreadyFriends();
+
+			if (!this.isOwnProfile) {
+				this.getRelationStatus();
+			}
 		},
 		methods: {
-			getPostsByUserId() {
-				axios
-					.get(`/api/v1/posts/user/${this.profileId}/`)
-					.then((response) => {
-						this.posts = response.data;
-					})
-					.catch((error) => {
-						console.error(error);
-						console.warn('Error getting feed');
-					});
-			},
 			fetchProfile() {
 				axios
 					.get(`/api/v1/user/${this.profileId}/`)
@@ -110,6 +103,18 @@
 						console.warn('Error getting profile');
 					});
 			},
+			getPostsByUserId() {
+				axios
+					.get(`/api/v1/posts/user/${this.profileId}/`)
+					.then((response) => {
+						this.posts = response.data;
+					})
+					.catch((error) => {
+						console.error(error);
+						console.warn('Error getting feed');
+					});
+			},
+
 			checkIfOwnProfile() {
 				// Compare the current user's ID with the profile's user ID
 				if (this.profileId === this.userStore.user.id) {
@@ -117,9 +122,17 @@
 				}
 				console.log(this.isOwnProfile);
 			},
-			checkIfAlreadyFriends() {
-				// Check if the current user is already friends with the profile
-				// If so, show a button to unfriend
+			async getRelationStatus() {
+				await axios
+					.get(`/api/v1/friend-requests/check-friendship/${this.profileId}/`)
+					.then((response) => {
+						this.relationStatus = response.data.message;
+						console.log('RELATION : ', this.relationStatus);
+					})
+					.catch((error) => {
+						console.error(error);
+						console.warn('Error getting relation status');
+					});
 			},
 		},
 	};

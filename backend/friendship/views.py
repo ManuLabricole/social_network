@@ -89,14 +89,15 @@ class CheckFriendshipStatus(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, profile_id):
-        print(request.data)
-        print(profile_id)
-        return Response({'message': 'Not friends'}, status=status.HTTP_200_OK)
+        # We access the user friends
         user_profile = self.request.user.userprofile  # type: ignore
-        friend_id = self.request.query_params.get('friend_id')  # type: ignore
-        friend_profile = UserProfile.objects.get(id=friend_id)
+        print(user_profile)
 
-        if friend_profile in user_profile.friends.all():
-            return Response({'message': 'Friends'}, status=status.HTTP_200_OK)
+        friends_id = [friend.user.id for friend in user_profile.friends.all()]
+        print('Friends id', friends_id)
+        print('Profile id', profile_id)
+
+        if profile_id in friends_id:
+            return Response({'message': True}, status=status.HTTP_200_OK)
         else:
-            return Response({'message': 'Not friends'}, status=status.HTTP_200_OK)
+            return Response({'message': False}, status=status.HTTP_200_OK)
