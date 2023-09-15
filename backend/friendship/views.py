@@ -5,15 +5,30 @@ from .models import UserProfile  # Import your UserProfile model here
 # First we create View to handle the request to the endpoint /api/friendship/friend-request/
 # We will use the POST method to create a new FriendRequest instance.
 
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
 
-class SendFriendRequestView(View):
-    def post(self, request, target_user_id):
-        # user_profile = request.user.userprofile
-        # target_user_profile = UserProfile.objects.get(id=target_user_id)
+from .models import FriendRequest
+from .serializers import FriendRequestSerializer
 
-        # # Check if a friend request already exists
-        # if target_user_profile in user_profile.friendship_requests.all():
-        #     return JsonResponse({'message': 'Friend request already sent'})
 
-        # user_profile.friendship_requests.add(target_user_profile)
-        return JsonResponse({'message': 'Friend request sent'})
+class FriendRequestListView(generics.ListCreateAPIView):
+    serializer_class = FriendRequestSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        serializer = FriendRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            # Customize the serializer to set the sender as the current user
+            serializer.validated_data['sender'] = self.request.user.userprofile
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        else:
+            response = JsonResponse(serializer.errors, status=400)
+            return response
+
+    def get_queryset(self):
+        user_profile = self.request.user.userprofile
+        queryset = user_profile.friendship_requests.all()
+        return queryset
