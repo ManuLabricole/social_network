@@ -97,7 +97,27 @@ class CheckFriendshipStatus(APIView):
         print('Friends id', friends_id)
         print('Profile id', profile_id)
 
+        response = {
+            "is_friend": False,
+            "is_request_pending": False,
+        }
+
         if profile_id in friends_id:
-            return Response({'message': True}, status=status.HTTP_200_OK)
+            response['is_friend'] = True
+            response['is_request_pending'] = False
+
         else:
-            return Response({'message': False}, status=status.HTTP_200_OK)
+            # Filter FriendRequest objects where receiver's user.id matches profile_id
+            friend_request = FriendRequest.objects.filter(
+                receiver__user__id=profile_id).first()
+
+            if friend_request:
+                print(friend_request.status)
+                response['is_friend'] = False
+                response['is_request_pending'] = True if friend_request.status == 'PENDING' else False
+
+            else:
+                response['is_friend'] = False
+                response['is_request_pending'] = False
+
+        return Response({'response': response}, status=status.HTTP_200_OK)

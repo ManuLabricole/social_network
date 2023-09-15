@@ -10,7 +10,7 @@
 
 		<!-- Check if request is pending, display pending icon and disable button -->
 		<div
-			v-else-if="isRequestPending"
+			v-else-if="friendRequestPending"
 			class="flex items-center space-x-1 text-gray-500">
 			<span class="material-icons"> pending </span>
 
@@ -19,7 +19,7 @@
 
 		<!-- Display send icon and button if not already friends or request is not pending -->
 		<button
-			v-if="!isFriend"
+			v-else-if="!isFriend"
 			@click="sendFriendRequest"
 			class="flex items-center inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">
 			<span class="material-icons mr-4">group_add</span>
@@ -35,7 +35,7 @@
 				type: Boolean,
 				required: true,
 			},
-			isRequestPending: {
+			friendRequestPending: {
 				type: Boolean,
 				required: true,
 			},
