@@ -72,14 +72,29 @@ class UpdateFriendRequestStatusView(APIView):
 
         try:
             friend_request = FriendRequest.objects.get(id=request_id)
-            print(friend_request)
+            print(f"\n {friend_request} \n")
         except FriendRequest.DoesNotExist:
             return Response({'error': 'Friend request not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        sender = friend_request.sender
+        receiver = friend_request.receiver
+
+        print(f"\n SENDER : {sender} \n")
+        print(f"\n RECEIVER : {receiver} \n")
 
         if new_status not in ['ACCEPTED', 'DECLINED']:
             return Response({'error': 'Invalid status.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        elif new_status == 'ACCEPTED':
+            sender.friends.add(receiver)
+            receiver.friends.add(sender)
+
+        elif new_status == 'DECLINED':
+            pass
+
         friend_request.status = new_status
+        sender.save()
+        receiver.save()
         friend_request.save()
 
         return Response({'message': 'Status updated successfully.'}, status=status.HTTP_200_OK)
