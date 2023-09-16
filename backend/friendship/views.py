@@ -31,6 +31,7 @@ class FriendRequestListView(generics.ListCreateAPIView):
         # Check if a friend request already exists
         existing_request = FriendRequest.objects.filter(
             sender=sender, receiver=receiver)
+        
         if existing_request.exists():
             return JsonResponse({'error': 'Friend request already sent.'}, status=400)
         # If no existing request, create a new one
@@ -61,7 +62,6 @@ class FriendRequestListView(generics.ListCreateAPIView):
 
 class UpdateFriendRequestStatusView(APIView):
     permission_classes = [IsAuthenticated]
-    print("hello")
 
     def put(self, request, request_id):
 
@@ -92,6 +92,16 @@ class UpdateFriendRequestStatusView(APIView):
         friend_request.save()
 
         return Response({'message': 'Status updated successfully.'}, status=status.HTTP_200_OK)
+
+    def delete(self, request, request_id):
+        try:
+            friend_request = FriendRequest.objects.get(id=request_id)
+        except FriendRequest.DoesNotExist:
+            return Response({'error': 'Friend request not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # friend_request.delete()
+        return Response({'message': 'Friend request deleted successfully.'}, status=status.HTTP_200_OK)
+
 
 class CheckFriendshipStatus(APIView):
     permission_classes = [IsAuthenticated]
@@ -130,3 +140,9 @@ class CheckFriendshipStatus(APIView):
                 response['is_request_pending'] = False
 
         return Response({'response': response}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def GetFriends():
+    print('helloooo')
+    return Response({'message': 'oui'})

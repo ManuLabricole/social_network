@@ -3,6 +3,7 @@
 		<div v-if="isFriend">
 			<button
 				class="flex align-item py-4 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-700">
+				@deleteFriend
 				<span class="material-icons text-red-700 mr-4"> person_remove </span>
 				Remove
 			</button>
@@ -51,16 +52,11 @@
 				console.log('isRequestPending changed');
 			},
 		},
-
 		mounted() {
 			console.log('isFriend', this.isFriend);
 			console.log('isRequestPending', this.isRequestPending);
 			console.log('isMyProfile', this.isMyProfile);
 			console.log('mounyted');
 		},
-
-		methods() {},
 	};
 </script>
-
-<style lang="postcss" scoped></style>

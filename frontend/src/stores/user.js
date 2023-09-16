@@ -40,7 +40,6 @@ export const useUserStore = defineStore('user', {
 
         // Action to set user authentication tokens and update the store.
         setToken(data) {
-            console.log('setToken', data)
 
             // Set user tokens and update authentication status.
             this.user.access = data.access
@@ -51,7 +50,6 @@ export const useUserStore = defineStore('user', {
             localStorage.setItem('user.access', data.access)
             localStorage.setItem('user.refresh', data.refresh)
 
-            console.log('user.access: ', localStorage.getItem('user.access'))
         },
 
         // Action to remove user authentication tokens and clear user data.
@@ -77,7 +75,6 @@ export const useUserStore = defineStore('user', {
 
         // Action to set user information and store it in local storage.
         setUserInfo(user) {
-            console.log('setUserInfo', user)
 
             // Set user information.
             this.user.id = user.id
@@ -89,7 +86,6 @@ export const useUserStore = defineStore('user', {
             localStorage.setItem('user.name', this.user.name)
             localStorage.setItem('user.email', this.user.email)
 
-            console.log('User', this.user)
         },
 
         // Action to refresh the access token using the refresh token.

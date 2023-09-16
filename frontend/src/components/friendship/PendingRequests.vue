@@ -61,6 +61,9 @@
 				pendingRequests: [],
 			};
 		},
+		mounted() {
+			this.fetchPendingRequests();
+		},
 		methods: {
 			async fetchPendingRequests() {
 				try {
@@ -69,9 +72,7 @@
 							request_type: 'pending',
 						},
 					});
-					console.log(response);
 					this.pendingRequests = response.data;
-					// console.log(this.pendingRequests);
 				} catch (error) {
 					console.log(error);
 				}
@@ -83,16 +84,12 @@
 						status: requestType,
 					})
 					.then((response) => {
-						console.log(response);
 						this.fetchPendingRequests();
 					})
 					.catch((error) => {
 						console.log(error);
 					});
 			},
-		},
-		mounted() {
-			this.fetchPendingRequests();
 		},
 	};
 </script>

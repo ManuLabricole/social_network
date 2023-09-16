@@ -161,5 +161,3 @@
 		},
 	};
 </script>
-
-<style lang="postcss" scoped></style>

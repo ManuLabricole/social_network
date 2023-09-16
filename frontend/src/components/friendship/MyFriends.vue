@@ -3,28 +3,29 @@
 </template>
 
 <script>
+	import { useUserStore } from '../../stores/user';
+	import axios from 'axios';
 	export default {
 		setup() {
-			return {};
+			return {
+				userStore: useUserStore(),
+			};
 		},
 		data() {
 			return {
-				pendingRequests: [],
+				friends: [],
 			};
 		},
+		mounted() {
+			this.fetchFriends();
+		},
 		methods: {
-			async fetchPendingRequests() {
+			async fetchFriends() {
 				try {
-					const response = await axios.get('/api/v1/friend-requests/', {
-						params: {
-							request_type: 'accepted',
-						},
-					});
-					console.log(response);
-					this.pendingRequests = response.data;
-					// console.log(this.pendingRequests);
+					const response = await axios.get('/api/v1/friend-requests/get-friends/'); // Adjust the URL if needed
+					this.friends = response;
 				} catch (error) {
-					console.log(error);
+					console.error('Error fetching friends:', error);
 				}
 			},
 		},
