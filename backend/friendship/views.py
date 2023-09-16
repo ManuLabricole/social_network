@@ -64,9 +64,6 @@ class UpdateFriendRequestStatusView(APIView):
     print("hello")
 
     def put(self, request, request_id):
-        # print(request.data)
-        # print(request_id)
-        # print(**kwargs)
 
         new_status = request.data.get('status')
 
@@ -78,9 +75,6 @@ class UpdateFriendRequestStatusView(APIView):
 
         sender = friend_request.sender
         receiver = friend_request.receiver
-
-        print(f"\n SENDER : {sender} \n")
-        print(f"\n RECEIVER : {receiver} \n")
 
         if new_status not in ['ACCEPTED', 'DECLINED']:
             return Response({'error': 'Invalid status.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -98,7 +92,6 @@ class UpdateFriendRequestStatusView(APIView):
         friend_request.save()
 
         return Response({'message': 'Status updated successfully.'}, status=status.HTTP_200_OK)
-
 
 class CheckFriendshipStatus(APIView):
     permission_classes = [IsAuthenticated]
