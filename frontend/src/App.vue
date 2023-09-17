@@ -1,7 +1,7 @@
 <template>
-	<NavigationBar :user="user" />
+	<NavigationBar ref="navbarRef" />
 	<main class="px-8 py-6 bg-gray-100">
-		<RouterView />
+		<RouterView @logged-in="handleLogin" />
 		<Toast />
 	</main>
 </template>
@@ -40,16 +40,10 @@
 				user: userStore.user,
 			};
 		},
-		watch: {
-			user: {
-				handler() {
-					console.log('user changed');
-					const userStore = useUserStore();
-					this.user = userStore.user;
-					console.log(this.user);
-					return this.user;
-				},
-				deep: true,
+		methods: {
+			handleLogin() {
+				console.log('App.vue handleLogin');
+				this.$refs.navbarRef.handleUserLogin();
 			},
 		},
 	};

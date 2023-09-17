@@ -61,6 +61,7 @@
 <script>
 	import axios from 'axios';
 	import { useUserStore } from '@/stores/user';
+
 	export default {
 		setup() {
 			const userStore = useUserStore();
@@ -110,6 +111,7 @@
 						console.log(response.data.access);
 						axios.defaults.headers.common['Authorization'] =
 							'Bearer ' + response.data.access;
+						this.$router.push('/feed');
 					})
 					.catch((error) => {
 						if (error.response.status === 400) {
@@ -119,20 +121,9 @@
 						} else {
 							this.errors.push(error);
 						}
-						return;
 					});
-
-				await axios
-					.get('/api/v1/me/')
-					.then((response) => {
-						console.log('API/ME response', response);
-						this.userStore.setUserInfo(response.data);
-						this.$router.push('/feed');
-					})
-					.catch((error) => {
-						console.log('API/ME error', error);
-						this.errors.push(error);
-					});
+				console.log('login - trigger logged-in event');
+				this.$emit('logged-in');
 			},
 		},
 	};

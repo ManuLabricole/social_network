@@ -73,21 +73,8 @@
 				</div>
 
 				<div class="menu-right">
-					<div
-						v-if="user.isAuthenticated"
-						class="flex align-center">
-						<router-link :to="{ name: 'profile', params: { id: userID } }">
-							<img
-								src="https://i.pravatar.cc/40?img=70"
-								class="rounded-full" />
-						</router-link>
-						<button
-							class="ml-4 py-4 px-6 bg-purple-600 text-white rounded-lg"
-							@click="logout">
-							Logout
-						</button>
-					</div>
-					<div v-else>
+					<user ref="userRef"></user>
+					<div v-if="!user.isAuthenticated">
 						<router-link
 							to="/login"
 							class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg"
@@ -106,29 +93,24 @@
 </template>
 
 <script>
+	import User from './User.vue';
 	import { useUserStore } from '../stores/user';
 
 	export default {
 		name: 'NavigationBar',
+		components: {
+			User,
+		},
 		setup() {
 			const userStore = useUserStore();
 			return {
 				user: userStore.user,
-				userID: userStore.user.id,
 			};
-		},
-		watch: {
-			user: {
-				handler() {},
-				deep: true,
-			},
 		},
 
 		methods: {
-			logout() {
-				const userStore = useUserStore();
-				userStore.removeToken();
-				this.$router.push({ name: 'login' });
+			handleUserLogin() {
+				this.$refs.userRef.login();
 			},
 		},
 	};

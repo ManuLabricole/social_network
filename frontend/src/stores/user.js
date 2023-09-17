@@ -12,16 +12,17 @@ export const useUserStore = defineStore('user', {
             email: null,            // User's email.
             access: null,           // Access token.
             refresh: null,          // Refresh token.
-        }
+        },
+        isLoading: false,           // Flag indicating if we are loading data.
     }),
 
     actions: {
         // Action to initialize the store based on locally stored authentication tokens.
         initStore() {
-            console.log('initStore', localStorage.getItem('user.access'))
+            console.log('initStore')
 
             if (localStorage.getItem('user.access')) {
-                // console.log('User has access!')
+                console.log('initStore - User has access!')
 
                 // Retrieve and set user data from local storage.
                 this.user.access = localStorage.getItem('user.access')
@@ -43,7 +44,6 @@ export const useUserStore = defineStore('user', {
             // Set user tokens and update authentication status.
             this.user.access = data.access
             this.user.refresh = data.refresh
-            this.user.isAuthenticated = true
 
             // Store tokens in local storage.
             localStorage.setItem('user.access', data.access)
@@ -75,7 +75,7 @@ export const useUserStore = defineStore('user', {
 
         // Action to set user information and store it in local storage.
         setUserInfo(user) {
-
+            // console.log('setUserInfo', user)
             // Set user information.
             this.user.id = user.id
             this.user.name = user.name
@@ -113,5 +113,13 @@ export const useUserStore = defineStore('user', {
                     this.removeToken()
                 })
         },
-    }
+    },
+    mutations: {
+        startLoading(state) {
+            state.isLoading = true;
+        },
+        endLoading(state) {
+            state.isLoading = false;
+        },
+    },
 })
