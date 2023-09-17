@@ -9,12 +9,37 @@
 
 <script>
 	import FeedItem from '../../components/feed/FeedItem.vue';
+	import axios from 'axios';
 	export default {
-		setup() {
-			return {};
-		},
 		components: {
 			FeedItem,
+		},
+		props: {
+			profileId: {
+				type: String,
+				required: true,
+			},
+		},
+		data() {
+			return {
+				posts: [],
+			};
+		},
+		mounted() {
+			this.getPostsByUserId();
+		},
+		methods: {
+			getPostsByUserId() {
+				axios
+					.get(`/api/v1/posts/user/${this.profileId}/`)
+					.then((response) => {
+						this.posts = response.data;
+					})
+					.catch((error) => {
+						console.error(error);
+						console.warn('Error getting feed');
+					});
+			},
 		},
 	};
 </script>
