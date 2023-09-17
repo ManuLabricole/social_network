@@ -58,22 +58,22 @@
 				v-bind:post="post" />
 		</div>
 		<div class="main-right col-span-1 space-y-4">
-			<PeopleYouMainKnow />
+			<PeopleYouMayKnow />
 			<Trends />
 		</div>
 	</div>
 </template>
 
 <script>
-	import PeopleYouMainKnow from '../components/PeopleYouMainKnow.vue';
-	import Trends from '../components/Trends.vue';
-	import FeedItem from '../components/FeedItem.vue';
+	import PeopleYouMayKnow from '@/components/feed/PeopleYouMayKnow.vue';
+	import Trends from '@/components/feed/Trends.vue';
+	import FeedItem from '@/components/feed/FeedItem.vue';
 	import axios from 'axios';
 
 	export default {
 		name: 'FeedView',
 		components: {
-			PeopleYouMainKnow,
+			PeopleYouMayKnow,
 			Trends,
 			FeedItem,
 		},
@@ -122,6 +122,4 @@
 	};
 </script>
 
-<style lang="postcss" scoped>
-
-</style>
+<style lang="postcss" scoped></style>

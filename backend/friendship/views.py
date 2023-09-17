@@ -1,18 +1,12 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.decorators import api_view
-from django.http import JsonResponse
-from django.views import View
-from .models import UserProfile  # Import your UserProfile model here
-# Create your views here.
-# First we create View to handle the request to the endpoint /api/friendship/friend-request/
-# We will use the POST method to create a new FriendRequest instance.
-
-from rest_framework import generics
+from rest_framework import status, generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django.http import JsonResponse
+
+from .models import UserProfile  # Import your UserProfile model here
 
 
 from .models import FriendRequest
