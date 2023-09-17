@@ -15,8 +15,8 @@
 			FeedItem,
 		},
 		props: {
-			profileId: {
-				type: String,
+			profile: {
+				type: Object,
 				required: true,
 			},
 		},
@@ -31,7 +31,7 @@
 		methods: {
 			getPostsByUserId() {
 				axios
-					.get(`/api/v1/posts/user/${this.profileId}/`)
+					.get(`/api/v1/posts/user/${this.profile.id}/`)
 					.then((response) => {
 						this.posts = response.data;
 					})
@@ -39,6 +39,11 @@
 						console.error(error);
 						console.warn('Error getting feed');
 					});
+			},
+		},
+		watch: {
+			profile() {
+				this.getPostsByUserId();
 			},
 		},
 	};

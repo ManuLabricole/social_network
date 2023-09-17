@@ -3,14 +3,15 @@
 		v-if="isProfileFetched"
 		class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
 		<profile-left-board :profile="profile" />
-		<profile-middle-feed :profileId="profile.id" />
+		<profile-middle-feed :profile="profile" />
+		<profile-right-suggestions :profile="profile" />
 	</div>
 </template>
 
 <script>
 	import ProfileLeftBoard from './ProfileLeftBoard.vue';
 	import ProfileMiddleFeed from './ProfileMiddleFeed.vue';
-	// import ProfileRightSuggestions from './ProfileRightSuggestions.vue';
+	import ProfileRightSuggestions from './ProfileRightSuggestions.vue';
 
 	import { useUserStore } from '@/stores/user';
 	import axios from 'axios';
@@ -20,7 +21,7 @@
 		components: {
 			ProfileLeftBoard,
 			ProfileMiddleFeed,
-			// ProfileRightSuggestions,
+			ProfileRightSuggestions,
 		},
 		props: {
 			id: {
@@ -60,6 +61,12 @@
 					this.isMyProfile = true;
 				}
 				console.log('isMyProfile', this.isMyProfile);
+			},
+		},
+		watch: {
+			id() {
+				this.fetchProfile();
+				this.setIsMyProfile();
 			},
 		},
 	};
