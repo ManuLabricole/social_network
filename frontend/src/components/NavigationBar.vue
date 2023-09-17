@@ -3,12 +3,12 @@
 		<div class="max-w-7xl mx-auto">
 			<div class="flex items-center justify-between">
 				<div class="menu-left">
-					<router-link to="feed"> </router-link>
+					<router-link to="/feed">ICON</router-link>
 				</div>
 
 				<div
-					v-if="isAuthenticated"
-					class="menu-center flex space-x-12">
+					class="menu-center flex space-x-12"
+					v-if="user.isAuthenticated">
 					<a
 						href="#"
 						class="text-purple-700">
@@ -73,15 +73,21 @@
 				</div>
 
 				<div class="menu-right">
-					<template v-if="isAuthenticated">
-						<router-link
-							:to="{ name: 'profile', params: { id: userStore.user.id } }">
+					<div
+						v-if="user.isAuthenticated"
+						class="flex align-center">
+						<router-link :to="{ name: 'profile', params: { id: userID } }">
 							<img
 								src="https://i.pravatar.cc/40?img=70"
 								class="rounded-full" />
 						</router-link>
-					</template>
-					<template v-else>
+						<button
+							class="ml-4 py-4 px-6 bg-purple-600 text-white rounded-lg"
+							@click="logout">
+							Logout
+						</button>
+					</div>
+					<div v-else>
 						<router-link
 							to="/login"
 							class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg"
@@ -92,7 +98,7 @@
 							class="py-4 px-6 bg-purple-600 text-white rounded-lg"
 							>Sign up</router-link
 						>
-					</template>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -100,20 +106,30 @@
 </template>
 
 <script>
-	import { watch } from 'vue';
+	import { useUserStore } from '../stores/user';
+
 	export default {
 		name: 'NavigationBar',
-		props: {
-			userStore: {
-				type: Object,
-				required: true,
+		setup() {
+			const userStore = useUserStore();
+			return {
+				user: userStore.user,
+				userID: userStore.user.id,
+			};
+		},
+		watch: {
+			user: {
+				handler() {},
+				deep: true,
 			},
 		},
-		data() {
-			return {
-				user: this.userStore.user,
-				isAuthenticated: this.userStore.user.isAuthenticated,
-			};
+
+		methods: {
+			logout() {
+				const userStore = useUserStore();
+				userStore.removeToken();
+				this.$router.push({ name: 'login' });
+			},
 		},
 	};
 </script>
