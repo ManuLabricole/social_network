@@ -1,5 +1,5 @@
 <template>
-	<NavigationBar :userStore="userStore" />
+	<NavigationBar />
 	<main class="px-8 py-6 bg-gray-100">
 		<RouterView />
 		<Toast />
@@ -8,7 +8,7 @@
 
 <script>
 	import NavigationBar from '@/components/NavigationBar.vue';
-	import Toast from '@/components/Toast.vue';
+	import Toast from '@/components/common/Toast.vue';
 	import axios from 'axios';
 
 	import { useUserStore } from '@/stores/user';

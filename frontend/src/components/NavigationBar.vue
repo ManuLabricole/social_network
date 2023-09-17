@@ -3,11 +3,7 @@
 		<div class="max-w-7xl mx-auto">
 			<div class="flex items-center justify-between">
 				<div class="menu-left">
-					<a
-						href="#"
-						class="text-xl"
-						>Wey</a
-					>
+					<router-link to="feed"> </router-link>
 				</div>
 
 				<div
@@ -78,22 +74,23 @@
 
 				<div class="menu-right">
 					<template v-if="isAuthenticated">
-						<router-link :to="{ name: 'profile', params: { id: user.id } }">
+						<router-link
+							:to="{ name: 'profile', params: { id: userStore.user.id } }">
 							<img
 								src="https://i.pravatar.cc/40?img=70"
 								class="rounded-full" />
 						</router-link>
 					</template>
 					<template v-else>
-						<RouterLink
+						<router-link
 							to="/login"
 							class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg"
-							>Log in</RouterLink
+							>Log in</router-link
 						>
-						<RouterLink
+						<router-link
 							to="/signup"
 							class="py-4 px-6 bg-purple-600 text-white rounded-lg"
-							>Sign up</RouterLink
+							>Sign up</router-link
 						>
 					</template>
 				</div>
@@ -103,31 +100,18 @@
 </template>
 
 <script>
+	import { watch } from 'vue';
+	import { useUserStore } from '@/stores/user';
 	export default {
 		name: 'NavigationBar',
-		props: {
-			userStore: {
-				type: Object,
-				required: true,
-			},
-		},
-		setup(props) {
-			const user = props.userStore.user;
-			const isAuthenticated = props.userStore.user.isAuthenticated;
+
+		setup() {
+			const userStore = useUserStore();
 
 			return {
-				user,
-				isAuthenticated,
+				user: userStore.user,
+				isAuthenticated: userStore.isAuthenticated,
 			};
-		},
-		watch: {
-			userStore: {
-				handler() {
-					this.user = this.userStore.user;
-					this.isAuthenticated = this.userStore.user.isAuthenticated;
-				},
-				deep: true,
-			},
 		},
 	};
 </script>
