@@ -101,16 +101,18 @@
 
 <script>
 	import { watch } from 'vue';
-	import { useUserStore } from '@/stores/user';
 	export default {
 		name: 'NavigationBar',
-
-		setup() {
-			const userStore = useUserStore();
-
+		props: {
+			userStore: {
+				type: Object,
+				required: true,
+			},
+		},
+		data() {
 			return {
-				user: userStore.user,
-				isAuthenticated: userStore.isAuthenticated,
+				user: this.userStore.user,
+				isAuthenticated: this.userStore.user.isAuthenticated,
 			};
 		},
 	};

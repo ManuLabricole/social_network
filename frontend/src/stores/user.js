@@ -18,7 +18,7 @@ export const useUserStore = defineStore('user', {
     actions: {
         // Action to initialize the store based on locally stored authentication tokens.
         initStore() {
-            // console.log('initStore', localStorage.getItem('user.access'))
+            console.log('initStore', localStorage.getItem('user.access'))
 
             if (localStorage.getItem('user.access')) {
                 // console.log('User has access!')
@@ -47,8 +47,8 @@ export const useUserStore = defineStore('user', {
             this.user.isAuthenticated = true
 
             // Store tokens in local storage.
-            // localStorage.setItem('user.access', data.access)
-            // localStorage.setItem('user.refresh', data.refresh)
+            localStorage.setItem('user.access', data.access)
+            localStorage.setItem('user.refresh', data.refresh)
 
         },
 

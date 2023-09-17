@@ -1,5 +1,5 @@
 <template>
-	<NavigationBar />
+	<NavigationBar :userStore="userStore" />
 	<main class="px-8 py-6 bg-gray-100">
 		<RouterView />
 		<Toast />
@@ -25,6 +25,11 @@
 		components: {
 			NavigationBar,
 			Toast,
+		},
+		data() {
+			return {
+				userStore: useUserStore(),
+			};
 		},
 
 		beforeCreate() {

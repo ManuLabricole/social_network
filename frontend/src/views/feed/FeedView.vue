@@ -93,9 +93,7 @@
 				axios
 					.get('/api/v1/posts')
 					.then((response) => {
-						console.log(response);
 						this.posts = response.data;
-						console.log(this.posts);
 					})
 					.catch((error) => {
 						console.error(error);
