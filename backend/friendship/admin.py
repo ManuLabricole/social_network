@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import UserProfile, FriendRequest
+from .models import UserProfile
 
 # We register the UserProfile model with the admin site.
 admin.site.register(UserProfile)
-admin.site.register(FriendRequest)
+# admin.site.register(FriendRequest)
