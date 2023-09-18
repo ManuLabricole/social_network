@@ -51,27 +51,4 @@ class PostListView(generics.ListCreateAPIView):
         return queryset
 
 
-class UserPostsListView(generics.ListAPIView):
-    serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return Post.objects.filter(author=self.request.user)
-
-
-class UserSpecificPostsListView(generics.ListAPIView):
-    serializer_class = PostSerializer
-
-    def get_queryset(self):
-        user_id = self.kwargs.get('user_id', None)
-
-        # print("Type of user_id:", type(user_id))
-        # print("Request data:", self.request)
-        # print("Request headers:", self.request.headers)
-
-        if user_id:
-            result = Post.objects.filter(author__id=user_id)
-            # print("Query result:", result)
-            return result
-        else:
-            return Post.objects.all()

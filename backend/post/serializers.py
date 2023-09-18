@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Post, PostAttachment
-from account.serializers import UserSerializer
+from userprofile.serializers import UserProfileSerializer
 
 
 class PostAttachmentSerializer(serializers.ModelSerializer):
@@ -10,7 +10,7 @@ class PostAttachmentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
+    author = UserProfileSerializer(read_only=True)
 
     class Meta:
         model = Post
