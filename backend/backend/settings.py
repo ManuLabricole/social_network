@@ -81,10 +81,9 @@ INSTALLED_APPS = [
 
     # Specific Apps
     'account',
+    'userprofile',
     'post',
     'friendship',
-
-
 ]
 
 MIDDLEWARE = [
