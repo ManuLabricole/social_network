@@ -11,7 +11,7 @@
 				</router-link>
 
 				<p>
-					<strong>{{ post.author.name }}</strong>
+					<strong>{{ post.author.user.name }}</strong>
 				</p>
 			</div>
 			<p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
