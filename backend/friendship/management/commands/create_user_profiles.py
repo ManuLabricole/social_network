@@ -1,6 +1,7 @@
 # myapp/management/commands/create_user_profiles.py
 from django.core.management.base import BaseCommand
-from friendship.models import User, UserProfile
+from account.models import User
+from userprofile.models import UserProfile
 
 # The command objective is to create a UserProfile instance for each existing User instance.
 
