@@ -2,7 +2,7 @@ import uuid
 from django.db import models
 from django.utils.timesince import timesince
 
-from account.models import User
+from userprofile.models import UserProfile
 
 # Model for storing post attachments, such as images.
 
@@ -19,7 +19,7 @@ class PostAttachment(models.Model):
 
     # The user who created this attachment.
     created_by = models.ForeignKey(
-        User, related_name='post_attachments', on_delete=models.CASCADE)
+        UserProfile, related_name='post_attachments', on_delete=models.CASCADE)
 
 # Model for representing posts made by users.
 
@@ -32,7 +32,7 @@ class Post(models.Model):
 
     # The author of the post.
     author = models.ForeignKey(
-        User, related_name='posts', on_delete=models.CASCADE)
+        UserProfile, related_name='posts', on_delete=models.CASCADE)
 
     # The title of the post (limited to 50 characters).
     title = models.CharField(max_length=50)
