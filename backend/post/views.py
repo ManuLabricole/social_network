@@ -10,11 +10,20 @@ class FeedPostsListView(generics.ListAPIView):
 
     def get_queryset(self):
         # Get the user's profile
-        # user_profile = self.request.user.userprofile
-        # # Get the user's friends
-        # friends = user_profile.friends.all()
-        # # Fetch posts authored by the user and their friends
-        # return Post.objects.filter(author__in=friends).union(
-        #     Post.objects.filter(author=user_profile)
-        # ).order_by('-created_at')
-        return Post.objects.all().order_by('-created_at')
+        user_profile = self.request.user.userprofile  # type: ignore
+
+        # Get the user's friends
+        friends = user_profile.friends.all()
+
+        # Fetch posts authored by the user and their friends
+        friends_posts = Post.objects.filter(author__in=friends)
+        my_posts = Post.objects.filter(author=user_profile)
+
+        # Convert querysets to lists and combine
+        combined_posts = list(friends_posts) + list(my_posts)
+
+        # Sort the combined list by 'created_at' in descending order
+        sorted_posts = sorted(
+            combined_posts, key=lambda x: x.created_at, reverse=True)
+
+        return sorted_posts
