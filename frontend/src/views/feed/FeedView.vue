@@ -1,17 +1,7 @@
 <template>
 	<div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
 		<div class="main-left col-span-1">
-			<div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-				<img
-					src="https://i.pravatar.cc/300?img=70"
-					class="mb-6 rounded-full" />
-
-				<p><strong>Code With Stein</strong></p>
-				<div class="mt-6 flex space-x-8 justify-around">
-					<p class="text-xs text-gray-500">182 friends</p>
-					<p class="text-xs text-gray-500">120 posts</p>
-				</div>
-			</div>
+			<MyProfile />
 		</div>
 		<div class="main-center col-span-2 space-y-4">
 			<div class="bg-white border border-gray-200 rounded-lg">
@@ -65,14 +55,16 @@
 </template>
 
 <script>
+	import MyProfile from '@/components/common/MyProfile.vue';
+	import FeedItem from '@/components/feed/FeedItem.vue';
 	import PeopleYouMayKnow from '@/components/feed/PeopleYouMayKnow.vue';
 	import Trends from '@/components/feed/Trends.vue';
-	import FeedItem from '@/components/feed/FeedItem.vue';
 	import axios from 'axios';
 
 	export default {
 		name: 'FeedView',
 		components: {
+			MyProfile,
 			PeopleYouMayKnow,
 			Trends,
 			FeedItem,
@@ -86,36 +78,37 @@
 			};
 		},
 		mounted() {
-			this.getFeed();
+			this.fetchFeed();
 		},
 		methods: {
-			getFeed() {
+			fetchFeed() {
 				axios
-					.get('/api/v1/posts')
+					.get('/api/v1/users/posts/feed')
 					.then((response) => {
 						this.posts = response.data;
+						console.log(response);
 					})
 					.catch((error) => {
 						console.error(error);
 						console.warn('Error getting feed');
 					});
 			},
-			createPost() {
-				axios
-					.post('/api/v1/posts/', {
-						title: this.postTitle,
-						body: this.postBody,
-					})
-					.then((response) => {
-						console.log(response);
-						this.body = '';
-						this.posts.unshift(response.data);
-					})
-					.catch((error) => {
-						console.error('ERROR', error);
-						this.titleError = error.response.data.title[0];
-					});
-			},
+			// createPost() {
+			// 	axios
+			// 		.post('/api/v1/posts/', {
+			// 			title: this.postTitle,
+			// 			body: this.postBody,
+			// 		})
+			// 		.then((response) => {
+			// 			console.log(response);
+			// 			this.body = '';
+			// 			this.posts.unshift(response.data);
+			// 		})
+			// 		.catch((error) => {
+			// 			console.error('ERROR', error);
+			// 			this.titleError = error.response.data.title[0];
+			// 		});
+			// },
 		},
 	};
 </script>
