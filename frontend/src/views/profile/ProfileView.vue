@@ -2,7 +2,9 @@
 	<div
 		v-if="isProfileFetched"
 		class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-		<profile-left-board :profile="profile" />
+		<profile-left-board
+			:profile="profile"
+			:isMyProfile="isMyProfile" />
 		<profile-middle-feed :profile="profile" />
 		<profile-right-suggestions :profile="profile" />
 	</div>
@@ -32,14 +34,14 @@
 		data() {
 			return {
 				userStore: useUserStore(),
+				isMyProfile: false,
 				isProfileFetched: false,
 				profile: {},
-				isMyProfile: false,
 			};
 		},
 		mounted() {
 			this.fetchProfile();
-			this.setIsMyProfile();
+			// this.setIsMyProfile();
 		},
 		methods: {
 			fetchProfile() {
@@ -47,6 +49,7 @@
 					.get(`/api/v1/user/${this.id}/`)
 					.then((response) => {
 						this.profile = response.data;
+						this.setIsMyProfile();
 						this.isProfileFetched = true;
 						console.log('profileFetched', this.profile);
 					})

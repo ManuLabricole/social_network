@@ -25,6 +25,7 @@
 <script>
 	// import MyPendingRequests from '@/components/friendship/PendingRequests.vue';
 	// import MyFriends from '../../components/friendship/MyFriends.vue';
+	import axios from 'axios';
 
 	export default {
 		setup() {
@@ -35,23 +36,36 @@
 				type: Object,
 				required: true,
 			},
+			isMyProfile: {
+				type: Boolean,
+				required: true,
+			},
+		},
+		mounted() {
+			if (this.isMyProfile) {
+				this.getFriendRequestStatus();
+			} else {
+				this.isLoading = false;
+				console.log('not my profile');
+			}
 		},
 		methods: {
-			// getFriendRequestStatus() {
-			// 	axios
-			// 		.get(`/api/v1/friend-requests/check-friendship/${this.profileId}/`)
-			// 		.then((response) => {
-			// 			console.log(response.data.response);
-			// 			this.isFriend = response.data.response.is_friend;
-			// 			this.isRequestPending = response.data.response.is_request_pending;
-			// 			this.isLoading = false;
-			// 		})
-			// 		.catch((error) => {
-			// 			console.error(error);
-			// 			console.warn('Error getting relation status');
-			// 			this.isLoading = false;
-			// 		});
-			// },
+			getFriendRequestStatus() {
+				console.log('getFriendRequestStatus');
+				axios
+					.get(`/api/v1/friend-requests/check-friendship/${this.profile.id}/`)
+					.then((response) => {
+						console.log(response.data.response);
+						this.isFriend = response.data.response.is_friend;
+						this.isRequestPending = response.data.response.is_request_pending;
+						this.isLoading = false;
+					})
+					.catch((error) => {
+						console.error(error);
+						console.warn('Error getting relation status');
+						this.isLoading = false;
+					});
+			},
 		},
 	};
 </script>
