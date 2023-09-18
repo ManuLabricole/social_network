@@ -9,4 +9,4 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'user']  # Add more fields if needed
+        fields = ['id', 'user', 'friends']  # Add more fields if needed
