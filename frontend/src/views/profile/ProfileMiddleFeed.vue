@@ -31,7 +31,7 @@
 		methods: {
 			getPostsByUserId() {
 				axios
-					.get(`/api/v1/users/posts/${this.profile.user.id}/`)
+					.get(`/api/v1/users/${this.profile.user.id}/posts/`)
 					.then((response) => {
 						this.posts = response.data;
 						console.log(response);

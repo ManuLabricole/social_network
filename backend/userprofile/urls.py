@@ -7,5 +7,5 @@ router.register(r'', views.UserViewSet, basename='userprofile')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('posts/', include('post.urls')),
+    path('<uuid:user_id>/posts/', include('post.urls')),
 ]

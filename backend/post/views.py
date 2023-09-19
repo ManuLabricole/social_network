@@ -28,3 +28,11 @@ class FeedPostsListView(generics.ListAPIView):
 
         return sorted_posts
 
+
+class UserPostsListView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        return Post.objects.filter(author__user__id=user_id)
