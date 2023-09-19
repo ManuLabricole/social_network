@@ -46,12 +46,12 @@
 		methods: {
 			fetchProfile() {
 				axios
-					.get(`/api/v1/user/${this.id}/`)
+					.get(`/api/v1/users/${this.id}/`)
 					.then((response) => {
 						this.profile = response.data;
 						this.setIsMyProfile();
 						this.isProfileFetched = true;
-						console.log('profileFetched', this.profile);
+						console.log(response);
 					})
 					.catch((error) => {
 						console.error(error);

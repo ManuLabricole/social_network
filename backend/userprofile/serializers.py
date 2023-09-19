@@ -6,8 +6,9 @@ from rest_framework import serializers
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    
+
     user = UserSerializer()
+
     class Meta:
         model = UserProfile
         # Add all fields you want
@@ -15,6 +16,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class PublicProfileSerializer(serializers.ModelSerializer):
+    user_name = serializers.SerializerMethodField()
+
     class Meta:
         model = UserProfile
-        fields = ['id', 'username']  # Only public fields
+        fields = ['user_name']
+
+    def get_user_name(self, obj):
+        return obj.user.name

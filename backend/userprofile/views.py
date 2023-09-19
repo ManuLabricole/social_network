@@ -18,27 +18,29 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(userprofile)
         return Response(serializer.data)
 
-    # def retrieve(self, request, pk=None):
-    #     if not pk:
-    #         return Response(status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self, request, pk=None):
 
-    #     try:
-    #         user = UserProfile.objects.get(pk=pk)
-    #     except User.DoesNotExist:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
+        if not pk:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    #     # If the user is requesting their own profile
-    #     if request.user == user:
-    #         serializer = UserProfileSerializer(user)
-    #     else:
-    #         # Check if they are friends
-    #         are_friends = Friendship.objects.filter(user1=request.user, user2=user).exists() or \
-    #             Friendship.objects.filter(
-    #                 user1=user, user2=request.user).exists()
+        try:
+            userprofile = UserProfile.objects.get(user__id=pk)
+        except UserProfile.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    #         if are_friends:
-    #             serializer = UserProfileSerializer(user)
-    #         else:
-    #             serializer = PublicProfileSerializer(user)
+        print(userprofile)
+        print(request.user)
 
-    #     return Response(serializer.data)
+        # If the user is requesting their own profile
+        if request.user == userprofile.user:
+            serializer = UserProfileSerializer()
+        else:
+            # Check if they are friends
+            if request.user.userprofile in userprofile.friends.all():
+                print("They are friends")
+                serializer = UserProfileSerializer(userprofile)
+            else:
+                print("They are not friends")
+                serializer = PublicProfileSerializer(userprofile)
+
+        return Response(serializer.data)
