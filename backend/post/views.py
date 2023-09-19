@@ -27,3 +27,4 @@ class FeedPostsListView(generics.ListAPIView):
             combined_posts, key=lambda x: x.created_at, reverse=True)
 
         return sorted_posts
+
