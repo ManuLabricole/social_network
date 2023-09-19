@@ -33,7 +33,7 @@
 						<input
 							type="email"
 							v-model="form.email"
-							placeholder="Your e-mail address"
+							placeholder="manu_barriol@hotmail.fr"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg" />
 					</div>
 
@@ -77,6 +77,8 @@
 				error400: 'Please enter your e-mail address and password.',
 				error401: 'Invalid credentials. Please try again.',
 				errors: [],
+				email: process.env.VUE_APP_EMAIL,
+				password: process.env.VUE_APP_PASSWORD,
 			};
 		},
 		mounted() {

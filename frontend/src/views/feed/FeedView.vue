@@ -78,7 +78,7 @@
 			};
 		},
 		mounted() {
-			// this.fetchFeed();
+			this.fetchFeed();
 		},
 		methods: {
 			fetchFeed() {
