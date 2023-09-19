@@ -59,7 +59,9 @@
 	import FeedItem from '@/components/feed/FeedItem.vue';
 	import PeopleYouMayKnow from '@/components/feed/PeopleYouMayKnow.vue';
 	import Trends from '@/components/feed/Trends.vue';
+
 	import axios from 'axios';
+	import { useUserStore } from '../../stores/user';
 
 	export default {
 		name: 'FeedView',
@@ -70,11 +72,14 @@
 			FeedItem,
 		},
 		data() {
+			const userStore = useUserStore();
+
 			return {
 				posts: [],
 				postBody: '',
 				postTitle: '',
 				titleError: '',
+				userId: userStore.user.id,
 			};
 		},
 		mounted() {
@@ -83,7 +88,7 @@
 		methods: {
 			fetchFeed() {
 				axios
-					.get('/api/v1/users/posts/feed')
+					.get(`/api/v1/users/${this.userId}/posts/feed`)
 					.then((response) => {
 						this.posts = response.data;
 						console.log(response);
