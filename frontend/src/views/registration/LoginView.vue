@@ -33,7 +33,7 @@
 						<input
 							type="email"
 							v-model="form.email"
-							placeholder="manu_barriol@hotmail.fr"
+							placeholder="insert your e-mail address"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg" />
 					</div>
 
@@ -42,7 +42,7 @@
 						<input
 							type="password"
 							v-model="form.password"
-							placeholder="Your password"
+							placeholder="insert your password"
 							class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg" />
 					</div>
 
@@ -71,14 +71,12 @@
 		data() {
 			return {
 				form: {
-					email: '',
-					password: '',
+					email: import.meta.env.VITE_APP_DEV_EMAIL,
+					password: import.meta.env.VITE_APP_DEV_PASSWORD,
 				},
 				error400: 'Please enter your e-mail address and password.',
 				error401: 'Invalid credentials. Please try again.',
 				errors: [],
-				email: process.env.VUE_APP_EMAIL,
-				password: process.env.VUE_APP_PASSWORD,
 			};
 		},
 		mounted() {
