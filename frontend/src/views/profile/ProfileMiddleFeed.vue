@@ -31,9 +31,10 @@
 		methods: {
 			getPostsByUserId() {
 				axios
-					.get(`/api/v1/posts/user/${this.profile.id}/`)
+					.get(`/api/v1/users/posts/${this.profile.user.id}/`)
 					.then((response) => {
 						this.posts = response.data;
+						console.log(response);
 					})
 					.catch((error) => {
 						console.error(error);
