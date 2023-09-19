@@ -41,6 +41,8 @@
 					.get('/api/v1/users/me/')
 					.then((response) => {
 						this.profile = response.data;
+						console.log(response);
+						console.log(this.profile);
 						this.isProfileFetched = true;
 					})
 					.catch((error) => {
