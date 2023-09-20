@@ -13,8 +13,9 @@
 					class="w-10 h-10 rounded-full" />
 				<!-- Sender's Name -->
 				<p class="font-medium">{{ request.sender.user.name }}</p>
+				<!-- <p class="text-xs text-gray-500">{{ request.id}}</p> -->
 			</div>
-			<!-- <div class="flex space-x-2">
+			<div class="flex space-x-2">
 				<button
 					class="p-2 bg-green-500 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200"
 					@click="updateFriendRequest(request.id, 'ACCEPTED')">
@@ -43,7 +44,7 @@
 							clip-rule="evenodd" />
 					</svg>
 				</button>
-			</div> -->
+			</div>
 		</div>
 	</div>
 </template>
@@ -76,19 +77,19 @@
 					console.log(error);
 				}
 			},
-			// updateFriendRequest(requestId, requestType) {
-			// 	console.log(requestId);
-			// 	axios
-			// 		.put(`/api/v1/friend-requests/${requestId}/`, {
-			// 			status: requestType,
-			// 		})
-			// 		.then((response) => {
-			// 			this.fetchPendingRequests();
-			// 		})
-			// 		.catch((error) => {
-			// 			console.log(error);
-			// 		});
-			// },
+			updateFriendRequest(requestId, requestType) {
+				console.log(requestId);
+				axios
+					.put(`/api/v1/users/friend-requests/${requestId}/`, {
+						status: requestType,
+					})
+					.then((response) => {
+						this.fetchPendingRequests();
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			},
 		},
 	};
 </script>
