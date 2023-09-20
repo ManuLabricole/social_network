@@ -9,25 +9,34 @@
 				<strong>{{ profile.user.name }}</strong>
 			</p>
 			<div class="mt-6 flex space-x-8 justify-around">
-				<p class="text-xs text-gray-500">182 friends</p>
+				<p class="text-xs text-gray-500">
+					{{ profile.number_of_friends }}
+					{{ profile.number_of_friends === 1 ? 'friend' : 'friends' }}
+				</p>
 				<p class="text-xs text-gray-500">120 posts</p>
 			</div>
 		</div>
-		<!-- <MyPendingRequests v-if="isMyProfile" />
+		<MyPendingRequests v-if="isMyProfile" />
+		<!--
 		<MyFriends v-if="isMyProfile" />
 		<SendRequest
 			v-if="isLoading === false"
 			:isFriend="isFriend"
-			:isRequestPending="isRequestPending" /> -->
-	</div>
+			:isRequestPending="isRequestPending" /> 
+		--></div>
 </template>
 
 <script>
-	// import MyPendingRequests from '@/components/friendship/PendingRequests.vue';
+	import MyPendingRequests from '../../components/friendship/MyPendingRequests.vue';
 	// import MyFriends from '../../components/friendship/MyFriends.vue';
 	import axios from 'axios';
 
 	export default {
+		name: 'ProfileLeftBoard',
+		components: {
+			MyPendingRequests,
+			// MyFriends,
+		},
 		setup() {
 			return {};
 		},
@@ -49,10 +58,11 @@
 				// console.log('not my profile');
 			}
 			// console.log('profile left board mounted', this.profile);
+			console.log('mounted() isMyProfile: ', this.isMyProfile);
 		},
 		methods: {
 			getFriendRequestStatus() {
-				console.log('getFriendRequestStatus');
+				// console.log('getFriendRequestStatus');
 				axios
 					.get(`/api/v1/friend-requests/check-friendship/${this.profile.id}/`)
 					.then((response) => {

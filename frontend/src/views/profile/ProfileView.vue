@@ -49,7 +49,10 @@
 		methods: {
 			fetchProfile() {
 				console.log('fetchProfile()', this.id);
-				const endpoint = this.id === this.userStore.user.id ? '/api/v1/users/me/' : `/api/v1/users/${this.id}/`;
+				const endpoint =
+					this.id === this.userStore.user.id
+						? '/api/v1/users/me/'
+						: `/api/v1/users/${this.id}/`;
 
 				axios
 					.get(endpoint)
@@ -57,7 +60,7 @@
 						this.profile = response.data;
 						this.setIsMyProfile();
 						this.isProfileFetched = true;
-						console.log('fetchProfile() response: ', response);
+						// console.log('fetchProfile() response: ', response);
 					})
 					.catch((error) => {
 						console.error(error);
@@ -65,8 +68,9 @@
 					});
 			},
 			setIsMyProfile() {
-				if (this.profile && this.profile.id === this.userStore.user.id) {
+				if (this.profile && this.profile.user.id === this.userStore.user.id) {
 					this.isMyProfile = true;
+					// console.log('setIsMyProfile() isMyProfile: ', this.isMyProfile);
 				} else {
 					this.isMyProfile = false; // Ensure it's set to false if conditions aren't met
 				}
@@ -74,9 +78,9 @@
 		},
 		watch: {
 			id() {
-				console.log('id changed');
+				// console.log('id changed');
 				this.fetchProfile();
-				console.log(this.profile);
+				// console.log(this.profile);
 			},
 		},
 	};
