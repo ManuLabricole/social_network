@@ -41,7 +41,9 @@
 		},
 		mounted() {
 			this.fetchProfile();
-			// this.setIsMyProfile();
+			this.setIsMyProfile();
+			console.log('ProfileView mounted');
+			console.log(this.profile);
 		},
 		methods: {
 			fetchProfile() {
@@ -51,7 +53,6 @@
 						this.profile = response.data;
 						this.setIsMyProfile();
 						this.isProfileFetched = true;
-						console.log(response);
 					})
 					.catch((error) => {
 						console.error(error);
