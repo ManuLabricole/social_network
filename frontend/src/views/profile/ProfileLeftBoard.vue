@@ -6,7 +6,7 @@
 				class="mb-6 rounded-full" />
 
 			<p>
-				<strong>{{ profile.name }}</strong>
+				<strong>{{ profile.user.name }}</strong>
 			</p>
 			<div class="mt-6 flex space-x-8 justify-around">
 				<p class="text-xs text-gray-500">182 friends</p>
@@ -48,6 +48,7 @@
 				this.isLoading = false;
 				console.log('not my profile');
 			}
+			console.log('profile left board mounted', this.profile);
 		},
 		methods: {
 			getFriendRequestStatus() {
