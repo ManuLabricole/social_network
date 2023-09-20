@@ -46,9 +46,9 @@
 				this.getFriendRequestStatus();
 			} else {
 				this.isLoading = false;
-				console.log('not my profile');
+				// console.log('not my profile');
 			}
-			console.log('profile left board mounted', this.profile);
+			// console.log('profile left board mounted', this.profile);
 		},
 		methods: {
 			getFriendRequestStatus() {
@@ -56,7 +56,7 @@
 				axios
 					.get(`/api/v1/friend-requests/check-friendship/${this.profile.id}/`)
 					.then((response) => {
-						console.log(response.data.response);
+						// console.log(response.data.response);
 						this.isFriend = response.data.response.is_friend;
 						this.isRequestPending = response.data.response.is_request_pending;
 						this.isLoading = false;

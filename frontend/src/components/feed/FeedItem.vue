@@ -77,11 +77,16 @@
 
 <script>
 	export default {
+		name: 'FeedItem',
 		props: {
 			post: {
 				type: Object,
 				required: true,
 			},
+		},
+		data() {
+			// console.log('FEEDITEM', this.post.author.user.id);
+			return {};
 		},
 	};
 </script>

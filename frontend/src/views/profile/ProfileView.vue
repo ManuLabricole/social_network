@@ -32,27 +32,32 @@
 			},
 		},
 		data() {
+			console.log('data() id: ', this.id);
+			console.log('data() profile : ', this.profile);
 			return {
 				userStore: useUserStore(),
 				isMyProfile: false,
 				isProfileFetched: false,
-				profile: {},
+				profile: null,
 			};
 		},
 		mounted() {
 			this.fetchProfile();
-			this.setIsMyProfile();
-			console.log('ProfileView mounted');
-			console.log(this.profile);
+			// console.log('ProfileView mounted');
+			// console.log(this.profile);
 		},
 		methods: {
 			fetchProfile() {
+				console.log('fetchProfile()', this.id);
+				const endpoint = this.id === this.userStore.user.id ? '/api/v1/users/me/' : `/api/v1/users/${this.id}/`;
+
 				axios
-					.get(`/api/v1/users/${this.id}/`)
+					.get(endpoint)
 					.then((response) => {
 						this.profile = response.data;
 						this.setIsMyProfile();
 						this.isProfileFetched = true;
+						console.log('fetchProfile() response: ', response);
 					})
 					.catch((error) => {
 						console.error(error);
@@ -60,17 +65,18 @@
 					});
 			},
 			setIsMyProfile() {
-				// Compare the current user's ID with the profile's user ID
-				if (this.profile.id === this.userStore.user.id) {
+				if (this.profile && this.profile.id === this.userStore.user.id) {
 					this.isMyProfile = true;
+				} else {
+					this.isMyProfile = false; // Ensure it's set to false if conditions aren't met
 				}
-				console.log('isMyProfile', this.isMyProfile);
 			},
 		},
 		watch: {
 			id() {
+				console.log('id changed');
 				this.fetchProfile();
-				this.setIsMyProfile();
+				console.log(this.profile);
 			},
 		},
 	};
