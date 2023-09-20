@@ -8,4 +8,5 @@ router.register(r'', views.UserViewSet, basename='userprofile')
 urlpatterns = [
     path('', include(router.urls)),
     path('<uuid:user_id>/posts/', include('post.urls')),
+    path('friend-requests/', include('friendship.urls')),
 ]

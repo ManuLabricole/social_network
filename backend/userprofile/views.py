@@ -44,3 +44,4 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
                 serializer = PublicProfileSerializer(userprofile)
 
         return Response(serializer.data)
+

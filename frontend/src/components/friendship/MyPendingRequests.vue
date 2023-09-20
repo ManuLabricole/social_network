@@ -14,8 +14,7 @@
 				<!-- Sender's Name -->
 				<p class="font-medium">{{ request.sender.user.name }}</p>
 			</div>
-			<div class="flex space-x-2">
-				<!-- Accept Button -->
+			<!-- <div class="flex space-x-2">
 				<button
 					class="p-2 bg-green-500 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200"
 					@click="updateFriendRequest(request.id, 'ACCEPTED')">
@@ -30,7 +29,6 @@
 							clip-rule="evenodd" />
 					</svg>
 				</button>
-				<!-- Refuse Button -->
 				<button
 					class="p-2 bg-red-500 rounded-full hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200"
 					@click="updateFriendRequest(request.id, 'DECLINED')">
@@ -45,13 +43,15 @@
 							clip-rule="evenodd" />
 					</svg>
 				</button>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
 
 <script>
 	import axios from 'axios';
+	import { useUserStore } from '../../stores/user';
+
 	export default {
 		setup() {
 			return {};
@@ -66,30 +66,29 @@
 		},
 		methods: {
 			async fetchPendingRequests() {
+				console.log('fetchPendingRequests()');
 				try {
-					const response = await axios.get('/api/v1/friend-requests/', {
-						params: {
-							request_type: 'pending',
-						},
-					});
+					const response = await axios.get(
+						'/api/v1/users/friend-requests/pending/'
+					);
 					this.pendingRequests = response.data;
 				} catch (error) {
 					console.log(error);
 				}
 			},
-			updateFriendRequest(requestId, requestType) {
-				console.log(requestId);
-				axios
-					.put(`/api/v1/friend-requests/${requestId}/`, {
-						status: requestType,
-					})
-					.then((response) => {
-						this.fetchPendingRequests();
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-			},
+			// updateFriendRequest(requestId, requestType) {
+			// 	console.log(requestId);
+			// 	axios
+			// 		.put(`/api/v1/friend-requests/${requestId}/`, {
+			// 			status: requestType,
+			// 		})
+			// 		.then((response) => {
+			// 			this.fetchPendingRequests();
+			// 		})
+			// 		.catch((error) => {
+			// 			console.log(error);
+			// 		});
+			// },
 		},
 	};
 </script>
