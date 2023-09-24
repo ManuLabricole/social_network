@@ -80,10 +80,11 @@
 			updateFriendRequest(requestId, requestType) {
 				console.log(requestId);
 				axios
-					.put(`/api/v1/users/friend-requests/${requestId}/`, {
+					.post(`/api/v1/users/friend-requests/${requestId}/`, {
 						status: requestType,
 					})
 					.then((response) => {
+						console;
 						this.fetchPendingRequests();
 					})
 					.catch((error) => {
