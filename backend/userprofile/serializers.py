@@ -27,11 +27,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class PublicProfileSerializer(serializers.ModelSerializer):
-    user_name = serializers.SerializerMethodField()
+    user = UserSerializer()
 
     class Meta:
         model = UserProfile
-        fields = ['user_name']
-
-    def get_user_name(self, obj):
-        return obj.user.name
+        fields = ['user']

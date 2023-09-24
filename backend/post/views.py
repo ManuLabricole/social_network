@@ -16,17 +16,22 @@ class FeedPostsListView(generics.ListAPIView):
         friends = user_profile.friends.all()
 
         # Fetch posts authored by the user and their friends
-        friends_posts = Post.objects.filter(author__in=friends)
-        my_posts = Post.objects.filter(author=user_profile)
+        if friends:
+            friends_posts = Post.objects.filter(author__in=friends)
+            my_posts = Post.objects.filter(author=user_profile)
 
-        # Convert querysets to lists and combine
-        combined_posts = list(friends_posts) + list(my_posts)
+            # Convert querysets to lists and combine
+            combined_posts = list(friends_posts) + list(my_posts)
 
-        # Sort the combined list by 'created_at' in descending order
-        sorted_posts = sorted(
-            combined_posts, key=lambda x: x.created_at, reverse=True)
+            # Sort the combined list by 'created_at' in descending order
+            sorted_posts = sorted(
+                combined_posts, key=lambda x: x.created_at, reverse=True)
 
-        return sorted_posts
+            return sorted_posts
+        
+        else:
+            posts = Post.objects.all()
+            return posts
 
 
 class UserPostsListView(generics.ListAPIView):
