@@ -13,8 +13,11 @@
 		<div class="flex items-center space-x-4">
 			<button
 				@click="removeFriendship(friend)"
-				class="flex items-center pr-2 pl-2 bg-gray-300 rounded-full hover:bg-red-400 active:bg-red-600">
-				<p class="m-0 mr-1">remove</p>
+				class="flex items-center p-2 bg-gray-300 rounded-full hover:bg-red-400 active:bg-red-700">
+				<!-- Text "remove" -->
+				<p class="mr-2 text-white">remove</p>
+
+				<!-- Cross Icon -->
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5 text-white"
@@ -51,11 +54,24 @@
 		methods: {
 			async fetchFriends() {
 				try {
-					const response = await axios.get(`/api/v1/users/me/friends/`); // Adjust the URL if needed
+					const response = await axios.get(`/api/v1/users/friends/me/`); // Adjust the URL if needed
 					console.log('Friends:', response);
 					this.friends = response.data;
 				} catch (error) {
 					console.error('Error fetching friends:', error);
+				}
+			},
+
+			async removeFriendship(friend) {
+				try {
+					const response = await axios.delete(
+						`/api/v1/users/friendship/requests/${friend.user.id}/`
+					);
+					console.log(response.data.message);
+					// Refresh the friends list after removal
+					this.fetchFriends();
+				} catch (error) {
+					console.error('Error removing friend:', error);
 				}
 			},
 		},

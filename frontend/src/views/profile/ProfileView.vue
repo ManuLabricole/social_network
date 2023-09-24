@@ -43,8 +43,8 @@
 		},
 		mounted() {
 			this.fetchProfile();
-			// console.log('ProfileView mounted');
-			// console.log(this.profile);
+			console.log('ProfileView mounted');
+			console.log(this.profile);
 		},
 		methods: {
 			fetchProfile() {
@@ -57,10 +57,11 @@
 				axios
 					.get(endpoint)
 					.then((response) => {
+						console.log('fetchProfile() response.data: ', response.data);
 						this.profile = response.data;
 						this.setIsMyProfile();
 						this.isProfileFetched = true;
-						// console.log('fetchProfile() response: ', response);
+						console.log('fetchProfile() response: ', response);
 					})
 					.catch((error) => {
 						console.error(error);
@@ -70,7 +71,7 @@
 			setIsMyProfile() {
 				if (this.profile && this.profile.user.id === this.userStore.user.id) {
 					this.isMyProfile = true;
-					// console.log('setIsMyProfile() isMyProfile: ', this.isMyProfile);
+					console.log('setIsMyProfile() isMyProfile: ', this.isMyProfile);
 				} else {
 					this.isMyProfile = false; // Ensure it's set to false if conditions aren't met
 				}

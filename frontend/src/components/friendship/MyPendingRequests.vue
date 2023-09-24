@@ -18,7 +18,7 @@
 			<div class="flex space-x-2">
 				<button
 					class="p-2 bg-green-500 rounded-full hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-200"
-					@click="updateFriendRequest(request.id, 'ACCEPTED')">
+					@click="updateFriendRequest(request.sender.user.id, 'ACCEPTED')">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5 text-white"
@@ -32,7 +32,8 @@
 				</button>
 				<button
 					class="p-2 bg-red-500 rounded-full hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200"
-					@click="updateFriendRequest(request.id, 'DECLINED')">
+					@click="updateFriendRequest(request.sender.user.id, 'DECLINED')">
+					<!-- <p>{{ request.sender.user.id }}</p> -->
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5 text-white"
@@ -70,21 +71,21 @@
 				console.log('fetchPendingRequests()');
 				try {
 					const response = await axios.get(
-						'/api/v1/users/friend-requests/pending/'
+						'/api/v1/users/friendship/me/pending/'
 					);
 					this.pendingRequests = response.data;
 				} catch (error) {
 					console.log(error);
 				}
 			},
-			updateFriendRequest(requestId, requestType) {
-				console.log(requestId);
+			updateFriendRequest(friendId, requestType) {
+				console.log(friendId);
 				axios
-					.post(`/api/v1/users/friend-requests/${requestId}/`, {
+					.put(`/api/v1/users/friendship/requests/${friendId}/`, {
 						status: requestType,
 					})
 					.then((response) => {
-						console;
+						console.log(response);
 						this.fetchPendingRequests();
 					})
 					.catch((error) => {

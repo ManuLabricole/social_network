@@ -14,6 +14,11 @@
 					{{ profile.number_of_friends === 1 ? 'friend' : 'friends' }}
 				</p>
 				<p class="text-xs text-gray-500">120 posts</p>
+				<p
+					v-if="!isMyProfile"
+					class="text-xs text-gray-500">
+					button add or remove
+				</p>
 			</div>
 		</div>
 		<MyPendingRequests v-if="isMyProfile" />
