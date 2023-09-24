@@ -57,3 +57,4 @@ def fetch_friends(request):
     friends = user_profile.friends.all()
     serializer = UserProfileSerializer(friends, many=True)
     return Response(serializer.data)
+

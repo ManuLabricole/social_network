@@ -1,6 +1,11 @@
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+
+
+from userprofile.models import UserProfile
 from .models import FriendRequest
 from .serializers import FriendRequestSerializer
 
@@ -20,34 +25,65 @@ def pending_friend_requests(request):
     return Response(serializer.data)
 
 
-@api_view(['POST'])
+@api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def update_friend_request(request, request_id):
-    print(request.data)
+def friendship(request, friend_id):
+    user_profile = request.user.userprofile
     try:
-        friend_request = FriendRequest.objects.get(
-            id=request_id, receiver=request.user.userprofile)
-    except FriendRequest.DoesNotExist:
-        return Response({"error": "Request not found."}, status=404)
+        friend_profile = UserProfile.objects.get(id=friend_id)
+    except UserProfile.DoesNotExist:
+        return Response({"error": "Friend not found."}, status=404)
 
-    print('Friend_request status', friend_request.status)
-    print('data', request.data["status"])
+    if friend_profile not in user_profile.friends.all():
+        return Response({"error": "This user is not your friend."}, status=400)
 
-    if 'status' in request.data:
-        if request.data['status'] == 'ACCEPTED':
-            print("yes")
-            # Add each other to friends list and update the number of friends
-            request.user.userprofile.friends.add(
-                friend_request.sender)
-            friend_request.sender.friends.add(
-                request.user.userprofile)
-            friend_request.status = 'ACCEPTED'
-            friend_request.save()
-            return Response({"message": "Friend request accepted."})
+    user_profile.remove_friend(friend_profile)
+    return Response({"message": "Friend removed successfully."})
 
-        elif request.data['status'] == 'DECLINED':
-            friend_request.status = 'rejected'
-            # friend_request.save()
-            return Response({"message": "Friend request rejected."})
 
-    return Response({"error": "Invalid action."}, status=400)
+class FriendshipView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, friend_id):
+        friend = UserProfile.objects.get(user__id=friend_id)
+        try:
+            friend_request = FriendRequest.objects.get(
+                sender=friend, receiver=request.user.userprofile)
+
+        except FriendRequest.DoesNotExist:
+            return Response({"error": "Request not found."}, status=404)
+
+        print('Friend_request status', friend_request.status)
+        print('data', request.data["status"])
+
+        if 'status' in request.data:
+            if request.data['status'] == 'ACCEPTED':
+                print("yes")
+                # Add each other to friends list and update the number of friends
+                request.user.userprofile.friends.add(
+                    friend_request.sender)
+                friend_request.sender.friends.add(
+                    request.user.userprofile)
+                friend_request.status = 'ACCEPTED'
+                friend_request.save()
+                return Response({"message": "Friend request accepted."})
+
+            elif request.data['status'] == 'DECLINED':
+                friend_request.status = 'DECLINED'
+                friend_request.save()
+                return Response({"message": "Friend request rejected."})
+
+        return Response({"error": "Invalid action."}, status=400)
+
+    def delete(self, request, friend_id):
+        user_profile = request.user.userprofile
+        try:
+            friend_profile = UserProfile.objects.get(user__id=friend_id)
+        except UserProfile.DoesNotExist:
+            return Response({"error": "Friend not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if friend_profile not in user_profile.friends.all():
+            return Response({"error": "This user is not your friend."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_profile.remove_friend(friend_profile)
+        return Response({"message": "Friend removed successfully."})

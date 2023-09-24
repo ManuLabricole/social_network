@@ -10,3 +10,8 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"UserProfile - {self.user.email}"
+
+    def remove_friend(self, friend_profile):
+        """Remove a friend from both user's and friend's lists."""
+        self.friends.remove(friend_profile)
+        friend_profile.friends.remove(self)

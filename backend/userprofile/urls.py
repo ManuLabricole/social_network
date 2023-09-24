@@ -7,7 +7,8 @@ router.register(r'', views.UserViewSet, basename='userprofile')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('friends/me/', views.fetch_friends, name='fetch-friends'),
     path('<uuid:user_id>/posts/', include('post.urls')),
-    path('friend-requests/', include('friendship.urls')),
-    path('me/friends/', views.fetch_friends, name='fetch-friends'),
+    path('friendship/', include('friendship.urls'))
+
 ]
