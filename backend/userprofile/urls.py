@@ -9,4 +9,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('<uuid:user_id>/posts/', include('post.urls')),
     path('friend-requests/', include('friendship.urls')),
+    path('me/friends/', views.fetch_friends, name='fetch-friends'),
 ]

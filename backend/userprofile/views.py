@@ -2,7 +2,11 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import UserProfile
-# from friendship.models import Friendship
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+from userprofile.models import UserProfile
+from userprofile.serializers import UserProfileSerializer
 
 from .serializers import UserProfileSerializer, PublicProfileSerializer
 
@@ -45,3 +49,11 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
         return Response(serializer.data)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def fetch_friends(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    friends = user_profile.friends.all()
+    serializer = UserProfileSerializer(friends, many=True)
+    return Response(serializer.data)

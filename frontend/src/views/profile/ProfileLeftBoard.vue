@@ -17,8 +17,8 @@
 			</div>
 		</div>
 		<MyPendingRequests v-if="isMyProfile" />
+		<Friends v-if="isMyProfile" />
 		<!--
-		<MyFriends v-if="isMyProfile" />
 		<SendRequest
 			v-if="isLoading === false"
 			:isFriend="isFriend"
@@ -28,14 +28,14 @@
 
 <script>
 	import MyPendingRequests from '../../components/friendship/MyPendingRequests.vue';
-	// import MyFriends from '../../components/friendship/MyFriends.vue';
+	import Friends from '../../components/friendship/Friends.vue';
 	import axios from 'axios';
 
 	export default {
 		name: 'ProfileLeftBoard',
 		components: {
 			MyPendingRequests,
-			// MyFriends,
+			Friends,
 		},
 		setup() {
 			return {};
