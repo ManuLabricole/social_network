@@ -13,7 +13,7 @@
 		<div class="flex items-center space-x-4">
 			<button
 				@click="removeFriendship(friend)"
-				class="flex items-center pr-2 pl-2 bg-gray-300 rounded-full hover:bg-red-500 focus:outline-none focus:ring focus:ring-red-200">
+				class="flex items-center pr-2 pl-2 bg-gray-300 rounded-full hover:bg-red-400 active:bg-red-600">
 				<p class="m-0 mr-1">remove</p>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
