@@ -28,16 +28,22 @@ class FeedPostsListView(generics.ListAPIView):
                 combined_posts, key=lambda x: x.created_at, reverse=True)
 
             return sorted_posts
-        
+
         else:
             posts = Post.objects.all()
             return posts
 
 
-class UserPostsListView(generics.ListAPIView):
+class UserPostsListView(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Post.objects.filter(author__user__id=user_id)
+
+    def create(self, request, *args, **kwargs):
+        print(request)
+        # Set the author to the current user's profile
+        request.data['author'] = request.user.userprofile.id  # type: ignore
+        return super().create(request, *args, **kwargs)

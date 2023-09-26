@@ -98,22 +98,22 @@
 						console.warn('Error getting feed');
 					});
 			},
-			// createPost() {
-			// 	axios
-			// 		.post('/api/v1/posts/', {
-			// 			title: this.postTitle,
-			// 			body: this.postBody,
-			// 		})
-			// 		.then((response) => {
-			// 			console.log(response);
-			// 			this.body = '';
-			// 			this.posts.unshift(response.data);
-			// 		})
-			// 		.catch((error) => {
-			// 			console.error('ERROR', error);
-			// 			this.titleError = error.response.data.title[0];
-			// 		});
-			// },
+			createPost() {
+				axios
+					.post('/api/v1/users/posts/', {
+						title: this.postTitle,
+						body: this.postBody,
+					})
+					.then((response) => {
+						console.log(response);
+						this.body = '';
+						this.posts.unshift(response.data);
+					})
+					.catch((error) => {
+						console.error('ERROR', error);
+						this.titleError = error.response.data.title[0];
+					});
+			},
 		},
 	};
 </script>
