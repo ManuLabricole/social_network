@@ -6,7 +6,7 @@
 			<button
 				@click="removeFriend"
 				class="flex align-item mr-4 py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-700 hover:text-red-500">
-				<span class="material-icons mr-2"> person_remove </span>
+				<span class="material-icons mr-2"> group_remove </span>
 				Remove
 			</button>
 		</div>
@@ -18,12 +18,20 @@
 				Request Sent
 			</button>
 		</div>
-		<div v-else-if="requestStatus == 'PENDING' && requestType == 'RECEIVED'">
+		<div
+			class="flex items-center inline-block py-1 px-2 mr-4"
+			v-else-if="requestStatus == 'PENDING' && requestType == 'RECEIVED'">
 			<button
-				@click="acceptFriendRequest('ACCEPTED')"
+				@click="updateFriendRequest('ACCEPTED')"
 				class="flex items-center inline-block py-1 px-2 mr-4 bg-green-600 text-white rounded-lg">
 				<span class="material-icons mr-4">group_add</span>
-				accept
+				Accept
+			</button>
+			<button
+				@click="updateFriendRequest('DECLINED')"
+				class="flex items-center inline-block py-1 px-2 mr-4 bg-gray-600 text-white rounded-lg">
+				<span class="material-icons mr-4">group_remove</span>
+				Decline
 			</button>
 		</div>
 		<div v-else>
@@ -72,7 +80,7 @@
 						console.log(error);
 					});
 			},
-			acceptFriendRequest(requestType) {
+			updateFriendRequest(requestType) {
 				axios
 					.put(`/api/v1/users/friendship/requests/${this.profile.user.id}/`, {
 						status: requestType,
@@ -88,6 +96,17 @@
 			removeFriend() {
 				axios
 					.delete(`/api/v1/users/friendship/requests/${this.profile.user.id}/`)
+					.then((response) => {
+						console.log(response.data);
+						this.checkFriendshipStatus();
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			},
+			sendFriendRequest() {
+				axios
+					.post(`/api/v1/users/friendship/requests/${this.profile.user.id}/`)
 					.then((response) => {
 						console.log(response.data);
 						this.checkFriendshipStatus();

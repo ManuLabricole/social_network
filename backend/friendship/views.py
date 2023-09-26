@@ -43,7 +43,64 @@ def friendship(request, friend_id):
 
 class FriendshipView(APIView):
     permission_classes = [IsAuthenticated]
+    def get(self, request, friend_id):
+        user_profile = request.user.userprofile
+        friend_profile = UserProfile.objects.get(user__id=friend_id)
+        print("FRIEND_ID", friend_id)
+        print("USER_ID", user_profile.user.id)
 
+        friend_request_sent = FriendRequest.objects.filter(
+            sender=user_profile, receiver=friend_profile).first()
+        friend_request_received = FriendRequest.objects.filter(
+            sender=friend_profile, receiver=user_profile).first()
+
+        if friend_request_sent:
+            return Response({
+                "message": "Friend request sent.",
+                "request": "SENT",
+                "status": friend_request_sent.status
+            })
+        if friend_request_received:
+            return Response({
+                "message": "Friend request received.",
+                "request": "RECEIVED",
+                "status": friend_request_received.status,
+            })
+        else:
+            return Response({
+                "message": "No friend request sent or received.",
+                "request": None,
+                "status": None
+            })
+
+    def post(self, request, friend_id):
+        user_profile = request.user.userprofile
+        friend_profile = UserProfile.objects.get(user__id=friend_id)
+
+        if friend_profile in user_profile.friends.all():
+            return Response({"error": "This user is already your friend."}, status=400)
+
+        if FriendRequest.objects.filter(sender=user_profile, receiver=friend_profile).exists():
+            return Response({"error": "Friend request already sent."}, status=400)
+
+        if FriendRequest.objects.filter(sender=friend_profile, receiver=user_profile).exists():
+            request = FriendRequest.objects.filter(
+                sender=friend_profile, receiver=user_profile).last()
+            if request.status == 'ACCEPTED': # type: ignore
+                return Response({"error": "You are already friends with this user."}, status=400)
+                return Response({"error": "You already have a friend request from this user."}, status=400)
+            elif request.status == 'DECLINED': # type: ignore
+                request.delete() # type: ignore
+                friend_request = FriendRequest(
+                    sender=user_profile, receiver=friend_profile)
+                friend_request.save()
+                return Response({"message": "Friend request sent."})
+
+        friend_request = FriendRequest(
+            sender=user_profile, receiver=friend_profile)
+        friend_request.save()
+        return Response({"message": "Friend request sent."})
+    
     def put(self, request, friend_id):
         friend = UserProfile.objects.get(user__id=friend_id)
         try:
@@ -87,45 +144,14 @@ class FriendshipView(APIView):
 
         request = FriendRequest.objects.filter(
             sender=user_profile, receiver=friend_profile).first()
-        
+
         if request is None:
             request = FriendRequest.objects.filter(
                 sender=friend_profile, receiver=user_profile).first()
-        
+
         try:
-            user_profile.remove_friend(friend_profile)
-            request.delete()
-            user_profile.save()
+            request.delete()  # type: ignore
             return Response({"message": "Friend removed successfully."})
         except:
             return Response({"error": "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, friend_id):
-        user_profile = request.user.userprofile
-        friend_profile = UserProfile.objects.get(user__id=friend_id)
-        print("FRIEND_ID", friend_id)
-        print("USER_ID", user_profile.user.id)
-
-        friend_request_sent = FriendRequest.objects.filter(
-            sender=user_profile, receiver=friend_profile).first()
-        friend_request_received = FriendRequest.objects.filter(
-            sender=friend_profile, receiver=user_profile).first()
-
-        if friend_request_sent:
-            return Response({
-                "message": "Friend request sent.",
-                "request": "SENT",
-                "status": friend_request_sent.status
-            })
-        if friend_request_received:
-            return Response({
-                "message": "Friend request received.",
-                "request": "RECEIVED",
-                "status": friend_request_received.status,
-            })
-        else:
-            return Response({
-                "message": "No friend request sent or received.",
-                "request": None,
-                "status": None
-            })
