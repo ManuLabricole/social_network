@@ -16,9 +16,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'author', 'title', 'body', 'created_at',
                   'created_at_formatted', 'attachment')
-
+        
     def create(self, validated_data):
-        # Set the author to the current user's profile
-        user_profile = self.context['request'].user.userprofile
-        post = Post.objects.create(author=user_profile, **validated_data)
-        return post
+        validated_data['author'] = self.context['request'].user.userprofile
+        return super().create(validated_data)

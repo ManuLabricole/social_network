@@ -1,11 +1,16 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+
+from userprofile.models import UserProfile
+
 from .models import Post
 from .serializers import PostSerializer
 
 
 class FeedPostsListView(generics.ListAPIView):
     serializer_class = PostSerializer
+    queryset = Post.objects.all()
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -34,16 +39,18 @@ class FeedPostsListView(generics.ListAPIView):
             return posts
 
 
-class UserPostsListView(generics.ListCreateAPIView):
-    serializer_class = PostSerializer
+class UserPostsView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Post.objects.filter(author__user__id=user_id)
 
+
     def create(self, request, *args, **kwargs):
-        print(request)
-        # Set the author to the current user's profile
-        request.data['author'] = request.user.userprofile.id  # type: ignore
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

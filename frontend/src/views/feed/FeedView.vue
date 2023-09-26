@@ -100,18 +100,18 @@
 			},
 			createPost() {
 				axios
-					.post('/api/v1/users/posts/', {
+					.post(`/api/v1/users/${this.userId}/posts/`, {
 						title: this.postTitle,
 						body: this.postBody,
 					})
 					.then((response) => {
 						console.log(response);
-						this.body = '';
+						this.postBody = '';
+						this.postTitle = '';
 						this.posts.unshift(response.data);
 					})
 					.catch((error) => {
 						console.error('ERROR', error);
-						this.titleError = error.response.data.title[0];
 					});
 			},
 		},
