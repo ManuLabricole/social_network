@@ -112,4 +112,8 @@ class FriendshipView(APIView):
                 "status": friend_request_received.status,
             })
         else:
-            return Response({"message": "No friend request sent or received."})
+            return Response({
+                "message": "No friend request sent or received.",
+                "request": None,
+                "status": None
+            })
