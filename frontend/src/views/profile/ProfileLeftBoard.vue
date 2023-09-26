@@ -23,17 +23,19 @@
 		</div>
 		<MyPendingRequests v-if="isMyProfile" />
 		<Friends v-if="isMyProfile" />
-		<!--
-		<SendRequest
-			v-if="isLoading === false"
-			:isFriend="isFriend"
-			:isRequestPending="isRequestPending" /> 
-		--></div>
+		<div class="flex align-center">
+			<SendRequest
+				v-if="!isMyProfile"
+				:profile="profile" />
+			<p>message</p>
+		</div>
+	</div>
 </template>
 
 <script>
 	import MyPendingRequests from '../../components/friendship/MyPendingRequests.vue';
 	import Friends from '../../components/friendship/Friends.vue';
+	import SendRequest from '../../components/friendship/SendRequest.vue';
 	import axios from 'axios';
 
 	export default {
@@ -41,6 +43,7 @@
 		components: {
 			MyPendingRequests,
 			Friends,
+			SendRequest,
 		},
 		setup() {
 			return {};
@@ -54,34 +57,6 @@
 				type: Boolean,
 				required: true,
 			},
-		},
-		mounted() {
-			if (this.isMyProfile) {
-				// this.getFriendRequestStatus();
-			} else {
-				this.isLoading = false;
-				// console.log('not my profile');
-			}
-			// console.log('profile left board mounted', this.profile);
-			console.log('mounted() isMyProfile: ', this.isMyProfile);
-		},
-		methods: {
-			// getFriendRequestStatus() {
-			// 	// console.log('getFriendRequestStatus');
-			// 	axios
-			// 		.get(`/api/v1/friend-requests/check-friendship/${this.profile.id}/`)
-			// 		.then((response) => {
-			// 			// console.log(response.data.response);
-			// 			this.isFriend = response.data.response.is_friend;
-			// 			this.isRequestPending = response.data.response.is_request_pending;
-			// 			this.isLoading = false;
-			// 		})
-			// 		.catch((error) => {
-			// 			console.error(error);
-			// 			console.warn('Error getting relation status');
-			// 			this.isLoading = false;
-			// 		});
-			// },
 		},
 	};
 </script>

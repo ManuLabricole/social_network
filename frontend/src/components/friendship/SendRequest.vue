@@ -1,15 +1,21 @@
 <template>
-	<div class="flex items-center space-x-2">
+	<div class="flex items-center space-between">
 		<div v-if="isFriend">
 			<button
-				class="flex align-item py-4 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-700">
-				@deleteFriend
-				<span class="material-icons text-red-700 mr-4"> person_remove </span>
+				class="flex align-item mr-4 py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-700 hover:text-red-500">
+				<span class="material-icons mr-2"> person_remove </span>
 				Remove
 			</button>
 		</div>
 
-		<!-- Check if request is pending, display pending icon and disable button -->
+		<button
+			v-else-if="!isFriend"
+			@click="sendFriendRequest"
+			class="flex items-center inline-block py-2 px-4 bg-purple-600 text-white rounded-lg">
+			<span class="material-icons mr-4">group_add</span>
+			add
+		</button>
+		<!--
 		<div
 			v-else-if="isRequestPending"
 			class="flex items-center space-x-1 text-gray-500">
@@ -17,46 +23,41 @@
 				class="flex align-item py-4 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-700 opacity-50 cursor-not-allowed pointer-events-none"
 				disabled>
 				<span class="material-icons mr-4"> pending </span>
-				<span>Pending Invitation</span>
+				<span>pending...</span>
 			</button>
-		</div>
-
-		<!-- Display send icon and button if not already friends or request is not pending -->
-		<button
-			v-else-if="!isFriend"
-			@click="sendFriendRequest"
-			class="flex items-center inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">
-			<span class="material-icons mr-4">group_add</span>
-			Send Request
-		</button>
+		</div> -->
 	</div>
 </template>
 
 <script>
 	export default {
+		name: 'SendRequest',
 		props: {
-			isFriend: {
-				type: Boolean,
-				required: true,
-			},
-			isRequestPending: {
-				type: Boolean,
+			profile: {
+				type: Object,
 				required: true,
 			},
 		},
-		watch: {
-			isFriend() {
-				console.log('isFriend changed');
-			},
-			isRequestPending() {
-				console.log('isRequestPending changed');
-			},
+		data() {
+			return {
+				isFriend: false,
+				isRequestPending: false,
+			};
 		},
-		mounted() {
-			console.log('isFriend', this.isFriend);
-			console.log('isRequestPending', this.isRequestPending);
-			console.log('isMyProfile', this.isMyProfile);
-			console.log('mounyted');
+		mounted() {},
+		methods: {
+			checkFriendshipStatus() {
+				axios
+					.get('/api/v1/users/friendship/status', {
+						profile_id: this.profile.id,
+					})
+					.then((response) => {
+						console.log(response);
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			},
 		},
 	};
 </script>

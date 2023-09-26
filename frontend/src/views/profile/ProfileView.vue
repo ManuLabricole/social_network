@@ -32,8 +32,6 @@
 			},
 		},
 		data() {
-			console.log('data() id: ', this.id);
-			console.log('data() profile : ', this.profile);
 			return {
 				userStore: useUserStore(),
 				isMyProfile: false,
@@ -43,8 +41,6 @@
 		},
 		mounted() {
 			this.fetchProfile();
-			console.log('ProfileView mounted');
-			console.log(this.profile);
 		},
 		methods: {
 			fetchProfile() {
@@ -57,11 +53,9 @@
 				axios
 					.get(endpoint)
 					.then((response) => {
-						console.log('fetchProfile() response.data: ', response.data);
 						this.profile = response.data;
 						this.setIsMyProfile();
 						this.isProfileFetched = true;
-						console.log('fetchProfile() response: ', response);
 					})
 					.catch((error) => {
 						console.error(error);
@@ -79,9 +73,8 @@
 		},
 		watch: {
 			id() {
-				// console.log('id changed');
+				this.isProfileFetched = false;
 				this.fetchProfile();
-				// console.log(this.profile);
 			},
 		},
 	};
