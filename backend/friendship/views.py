@@ -90,14 +90,26 @@ class FriendshipView(APIView):
 
     def get(self, request, friend_id):
         user_profile = request.user.userprofile
+        friend_profile = UserProfile.objects.get(user__id=friend_id)
         print("FRIEND_ID", friend_id)
         print("USER_ID", user_profile.user.id)
-        # try:
-        #     friend_profile = UserProfile.objects.get(user__id=friend_id)
-        # except UserProfile.DoesNotExist:
-        #     return Response({"error": "Friend not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        # if friend_profile not in user_profile.friends.all():
-        #     return Response({"error": "This user is not your friend."}, status=status.HTTP_400_BAD_REQUEST)
+        friend_request_sent = FriendRequest.objects.filter(
+            sender=user_profile, receiver=friend_profile).first()
+        friend_request_received = FriendRequest.objects.filter(
+            sender=friend_profile, receiver=user_profile).first()
 
-        return Response({"message": "This user is your friend."})
+        if friend_request_sent:
+            return Response({
+                "message": "Friend request sent.",
+                "request": "sent",
+                "status": friend_request_sent.status
+            })
+        if friend_request_received:
+            return Response({
+                "message": "Friend request received.",
+                "request": "received",
+                "status": friend_request_received.status,
+            })
+        else:
+            return Response({"message": "No friend request sent or received."})

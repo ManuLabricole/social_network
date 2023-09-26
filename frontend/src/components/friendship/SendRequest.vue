@@ -51,7 +51,7 @@
 		methods: {
 			checkFriendshipStatus() {
 				axios
-					.get(`/api/v1/users/friendship/status/${this.profile.user.id}`)
+					.get(`/api/v1/users/friendship/${this.profile.user.id}/status`)
 					.then((response) => {
 						console.log(response);
 					})
