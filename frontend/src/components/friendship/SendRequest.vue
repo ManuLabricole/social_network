@@ -30,6 +30,7 @@
 </template>
 
 <script>
+	import axios from 'axios';
 	export default {
 		name: 'SendRequest',
 		props: {
@@ -44,13 +45,13 @@
 				isRequestPending: false,
 			};
 		},
-		mounted() {},
+		mounted() {
+			this.checkFriendshipStatus();
+		},
 		methods: {
 			checkFriendshipStatus() {
 				axios
-					.get('/api/v1/users/friendship/status', {
-						profile_id: this.profile.id,
-					})
+					.get(`/api/v1/users/friendship/status/${this.profile.user.id}`)
 					.then((response) => {
 						console.log(response);
 					})

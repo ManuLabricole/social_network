@@ -6,4 +6,6 @@ urlpatterns = [
          name='pending-friend-requests'),
     path('requests/<uuid:friend_id>/', views.FriendshipView.as_view(),
          name='update-friend-requests'),
+    path('status/<uuid:friend_id>/',
+         views.FriendshipView.as_view(), name='friendship')
 ]
