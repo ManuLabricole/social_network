@@ -80,16 +80,25 @@ class FriendshipView(APIView):
 
     def delete(self, request, friend_id):
         user_profile = request.user.userprofile
-        try:
-            friend_profile = UserProfile.objects.get(user__id=friend_id)
-        except UserProfile.DoesNotExist:
-            return Response({"error": "Friend not found."}, status=status.HTTP_404_NOT_FOUND)
+        friend_profile = UserProfile.objects.get(user__id=friend_id)
 
         if friend_profile not in user_profile.friends.all():
             return Response({"error": "This user is not your friend."}, status=status.HTTP_400_BAD_REQUEST)
 
-        user_profile.remove_friend(friend_profile)
-        return Response({"message": "Friend removed successfully."})
+        request = FriendRequest.objects.filter(
+            sender=user_profile, receiver=friend_profile).first()
+        
+        if request is None:
+            request = FriendRequest.objects.filter(
+                sender=friend_profile, receiver=user_profile).first()
+        
+        try:
+            user_profile.remove_friend(friend_profile)
+            request.delete()
+            user_profile.save()
+            return Response({"message": "Friend removed successfully."})
+        except:
+            return Response({"error": "Something went wrong."}, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, friend_id):
         user_profile = request.user.userprofile

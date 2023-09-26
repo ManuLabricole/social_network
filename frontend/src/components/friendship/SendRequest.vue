@@ -4,6 +4,7 @@
 		class="flex items-center space-between">
 		<div v-if="requestStatus == 'ACCEPTED'">
 			<button
+				@click="removeFriend"
 				class="flex align-item mr-4 py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-700 hover:text-red-500">
 				<span class="material-icons mr-2"> person_remove </span>
 				Remove
@@ -76,6 +77,17 @@
 					.put(`/api/v1/users/friendship/requests/${this.profile.user.id}/`, {
 						status: requestType,
 					})
+					.then((response) => {
+						console.log(response.data);
+						this.checkFriendshipStatus();
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			},
+			removeFriend() {
+				axios
+					.delete(`/api/v1/users/friendship/requests/${this.profile.user.id}/`)
 					.then((response) => {
 						console.log(response.data);
 						this.checkFriendshipStatus();
