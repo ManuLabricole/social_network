@@ -1,17 +1,7 @@
 <template>
 	<div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
 		<div class="main-left col-span-1">
-			<div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-				<img
-					src="https://i.pravatar.cc/300?img=70"
-					class="mb-6 rounded-full" />
-
-				<p><strong>Code With Stein</strong></p>
-				<div class="mt-6 flex space-x-8 justify-around">
-					<p class="text-xs text-gray-500">182 friends</p>
-					<p class="text-xs text-gray-500">120 posts</p>
-				</div>
-			</div>
+			<MyProfile />
 		</div>
 		<div class="main-center col-span-2 space-y-4">
 			<div class="bg-white border border-gray-200 rounded-lg">
@@ -58,44 +48,50 @@
 				v-bind:post="post" />
 		</div>
 		<div class="main-right col-span-1 space-y-4">
-			<PeopleYouMainKnow />
+			<PeopleYouMayKnow />
 			<Trends />
 		</div>
 	</div>
 </template>
 
 <script>
-	import PeopleYouMainKnow from '../components/PeopleYouMainKnow.vue';
-	import Trends from '../components/Trends.vue';
-	import FeedItem from '../components/FeedItem.vue';
+	import MyProfile from '@/components/common/MyProfile.vue';
+	import FeedItem from '@/components/feed/FeedItem.vue';
+	import PeopleYouMayKnow from '@/components/feed/PeopleYouMayKnow.vue';
+	import Trends from '@/components/feed/Trends.vue';
+
 	import axios from 'axios';
+	import { useUserStore } from '../../stores/user';
 
 	export default {
 		name: 'FeedView',
 		components: {
-			PeopleYouMainKnow,
+			MyProfile,
+			PeopleYouMayKnow,
 			Trends,
 			FeedItem,
 		},
 		data() {
+			const userStore = useUserStore();
+
 			return {
 				posts: [],
 				postBody: '',
 				postTitle: '',
 				titleError: '',
+				userId: userStore.user.id,
 			};
 		},
 		mounted() {
-			this.getFeed();
+			this.fetchFeed();
 		},
 		methods: {
-			getFeed() {
+			fetchFeed() {
 				axios
-					.get('/api/v1/posts')
+					.get(`/api/v1/users/${this.userId}/posts/feed`)
 					.then((response) => {
-						console.log(response);
 						this.posts = response.data;
-						console.log(this.posts);
+						console.log(response);
 					})
 					.catch((error) => {
 						console.error(error);
@@ -104,22 +100,20 @@
 			},
 			createPost() {
 				axios
-					.post('/api/v1/posts/', {
+					.post(`/api/v1/users/${this.userId}/posts/`, {
 						title: this.postTitle,
 						body: this.postBody,
 					})
 					.then((response) => {
 						console.log(response);
-						this.body = '';
+						this.postBody = '';
+						this.postTitle = '';
 						this.posts.unshift(response.data);
 					})
 					.catch((error) => {
 						console.error('ERROR', error);
-						this.titleError = error.response.data.title[0];
 					});
 			},
 		},
 	};
 </script>
-
-<style lang="postcss" scoped></style>

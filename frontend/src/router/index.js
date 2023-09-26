@@ -10,17 +10,17 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('../views/SignupView.vue')
+      component: () => import('../views/registration/SignupView.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/registration/LoginView.vue')
     },
     {
       path: '/feed',
       name: 'feed',
-      component: () => import('../views/FeedView.vue')
+      component: () => import('../views/feed/FeedView.vue')
     },
     {
       path: '/messages',
@@ -30,12 +30,12 @@ const router = createRouter({
     {
       path: '/search',
       name: 'search',
-      component: () => import('../views/SearchView.vue')
+      component: () => import('../views/feed/SearchView.vue')
     },
     {
       path: '/profile/:id',
       name: 'profile',
-      component: () => import('../views/ProfileView.vue'),
+      component: () => import('@/views/profile/ProfileView.vue'),
       props: true
     }
   ]
