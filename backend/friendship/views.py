@@ -102,13 +102,13 @@ class FriendshipView(APIView):
         if friend_request_sent:
             return Response({
                 "message": "Friend request sent.",
-                "request": "sent",
+                "request": "SENT",
                 "status": friend_request_sent.status
             })
         if friend_request_received:
             return Response({
                 "message": "Friend request received.",
-                "request": "received",
+                "request": "RECEIVED",
                 "status": friend_request_received.status,
             })
         else:

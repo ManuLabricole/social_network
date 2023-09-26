@@ -1,31 +1,38 @@
 <template>
-	<div class="flex items-center space-between">
-		<div v-if="isFriend">
+	<div
+		v-if="isRequestChecked"
+		class="flex items-center space-between">
+		<div v-if="requestStatus == 'ACCEPTED'">
 			<button
 				class="flex align-item mr-4 py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-700 hover:text-red-500">
 				<span class="material-icons mr-2"> person_remove </span>
 				Remove
 			</button>
 		</div>
-
-		<button
-			v-else-if="!isFriend"
-			@click="sendFriendRequest"
-			class="flex items-center inline-block py-2 px-4 bg-purple-600 text-white rounded-lg">
-			<span class="material-icons mr-4">group_add</span>
-			add
-		</button>
-		<!--
-		<div
-			v-else-if="isRequestPending"
-			class="flex items-center space-x-1 text-gray-500">
+		<div v-else-if="requestStatus == 'PENDING' && requestType == 'SENT'">
 			<button
-				class="flex align-item py-4 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-700 opacity-50 cursor-not-allowed pointer-events-none"
-				disabled>
-				<span class="material-icons mr-4"> pending </span>
-				<span>pending...</span>
+				disabled
+				class="flex items-center inline-block py-1 px-2 mr-4 bg-gray-400 text-white rounded-lg cursor-not-allowed opacity-75">
+				<span class="material-icons mr-4">check_circle</span>
+				Request Sent
 			</button>
-		</div> -->
+		</div>
+		<div v-else-if="requestStatus == 'PENDING' && requestType == 'RECEIVED'">
+			<button
+				@click="sendFriendRequest"
+				class="flex items-center inline-block py-1 px-2 mr-4 bg-green-600 text-white rounded-lg">
+				<span class="material-icons mr-4">group_add</span>
+				accept
+			</button>
+		</div>
+		<div v-else>
+			<button
+				@click="sendFriendRequest"
+				class="flex items-center inline-block mr-4 py-1 px-2 bg-purple-600 text-white rounded-lg">
+				<span class="material-icons mr-4">group_add</span>
+				add
+			</button>
+		</div>
 	</div>
 </template>
 
@@ -42,7 +49,9 @@
 		data() {
 			return {
 				isFriend: false,
-				isRequestPending: false,
+				isRequestChecked: false,
+				requestType: '',
+				requestStatus: '',
 			};
 		},
 		mounted() {
@@ -53,7 +62,10 @@
 				axios
 					.get(`/api/v1/users/friendship/${this.profile.user.id}/status`)
 					.then((response) => {
-						console.log(response);
+						this.requestStatus = response.data.status;
+						this.requestType = response.data.request;
+						this.isRequestChecked = true;
+						console.log(response.data);
 					})
 					.catch((error) => {
 						console.log(error);
