@@ -5,7 +5,7 @@
 		<div v-if="requestStatus == 'ACCEPTED'">
 			<button
 				@click="removeFriend"
-				class="flex align-item mr-4 py-2 px-4 bg-gray-500 text-white rounded-lg hover:bg-gray-700 hover:text-red-500">
+				class="flex align-item mr-4 py-1 px-2 bg-gray-500 text-white rounded-lg">
 				<span class="material-icons mr-2"> group_remove </span>
 				Remove
 			</button>
