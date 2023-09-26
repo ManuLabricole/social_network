@@ -73,7 +73,10 @@ class FriendshipView(APIView):
                 friend_request.save()
                 return Response({"message": "Friend request rejected."})
 
-        return Response({"error": "Invalid action."}, status=400)
+        return Response({
+            "error": "Invalid action.",
+            "message": f"{request.data['status']} : is a not valid input. Only ACCEPTED or DECLINED is valid."
+        }, status=400)
 
     def delete(self, request, friend_id):
         user_profile = request.user.userprofile

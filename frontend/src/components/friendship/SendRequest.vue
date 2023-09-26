@@ -19,7 +19,7 @@
 		</div>
 		<div v-else-if="requestStatus == 'PENDING' && requestType == 'RECEIVED'">
 			<button
-				@click="sendFriendRequest"
+				@click="acceptFriendRequest('ACCEPTED')"
 				class="flex items-center inline-block py-1 px-2 mr-4 bg-green-600 text-white rounded-lg">
 				<span class="material-icons mr-4">group_add</span>
 				accept
@@ -66,6 +66,19 @@
 						this.requestType = response.data.request;
 						this.isRequestChecked = true;
 						console.log(response.data);
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			},
+			acceptFriendRequest(requestType) {
+				axios
+					.put(`/api/v1/users/friendship/requests/${this.profile.user.id}/`, {
+						status: requestType,
+					})
+					.then((response) => {
+						console.log(response.data);
+						this.checkFriendshipStatus();
 					})
 					.catch((error) => {
 						console.log(error);
