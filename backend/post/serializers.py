@@ -31,7 +31,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id', 'author', 'title', 'body', 'created_at',
-                  'created_at_formatted', 'attachment')
+                  'created_at_formatted', 'attachment', 'likes', 'comments')
 
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user.userprofile
