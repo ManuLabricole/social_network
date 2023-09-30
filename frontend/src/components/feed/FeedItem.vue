@@ -4,14 +4,15 @@
 		:key="post.id">
 		<div class="mb-6 flex items-center justify-between">
 			<div class="flex items-center space-x-6">
-				<router-link :to="{ name: 'profile', params: { id: post.author.id } }">
+				<router-link
+					:to="{ name: 'profile', params: { id: post.author.user.id } }">
 					<img
 						src="https://i.pravatar.cc/300?img=70"
 						class="w-[40px] rounded-full" />
 				</router-link>
 
 				<p>
-					<strong>{{ post.author.name }}</strong>
+					<strong>{{ post.author.user.name }}</strong>
 				</p>
 			</div>
 			<p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
@@ -76,11 +77,16 @@
 
 <script>
 	export default {
+		name: 'FeedItem',
 		props: {
 			post: {
 				type: Object,
 				required: true,
 			},
+		},
+		data() {
+			// console.log('FEEDITEM', this.post.author.user.id);
+			return {};
 		},
 	};
 </script>

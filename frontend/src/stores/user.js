@@ -12,16 +12,17 @@ export const useUserStore = defineStore('user', {
             email: null,            // User's email.
             access: null,           // Access token.
             refresh: null,          // Refresh token.
-        }
+        },
+        isLoading: false,           // Flag indicating if we are loading data.
     }),
 
     actions: {
         // Action to initialize the store based on locally stored authentication tokens.
         initStore() {
-            console.log('initStore', localStorage.getItem('user.access'))
+            // console.log('initStore')
 
             if (localStorage.getItem('user.access')) {
-                console.log('User has access!')
+                // console.log('initStore - User has access!')
 
                 // Retrieve and set user data from local storage.
                 this.user.access = localStorage.getItem('user.access')
@@ -33,25 +34,21 @@ export const useUserStore = defineStore('user', {
 
                 // Refresh the access token.
                 this.refreshToken()
-
-                console.log('Initialized user:', this.user)
+                // console.info('Initialized user:', this.user)
             }
         },
 
         // Action to set user authentication tokens and update the store.
         setToken(data) {
-            console.log('setToken', data)
 
             // Set user tokens and update authentication status.
             this.user.access = data.access
             this.user.refresh = data.refresh
-            this.user.isAuthenticated = true
 
             // Store tokens in local storage.
             localStorage.setItem('user.access', data.access)
             localStorage.setItem('user.refresh', data.refresh)
 
-            console.log('user.access: ', localStorage.getItem('user.access'))
         },
 
         // Action to remove user authentication tokens and clear user data.
@@ -63,9 +60,9 @@ export const useUserStore = defineStore('user', {
             this.user.refresh = null
             this.user.access = null
             this.user.isAuthenticated = false
-            this.user.id = false
-            this.user.name = false
-            this.user.email = false
+            this.user.id = null
+            this.user.name = null
+            this.user.email = null
 
             // Clear token data from local storage.
             localStorage.setItem('user.access', '')
@@ -73,23 +70,24 @@ export const useUserStore = defineStore('user', {
             localStorage.setItem('user.id', '')
             localStorage.setItem('user.name', '')
             localStorage.setItem('user.email', '')
+            localStorage.setItem('user.isAuthenticated', false)
         },
 
         // Action to set user information and store it in local storage.
         setUserInfo(user) {
-            console.log('setUserInfo', user)
-
+            // console.log('setUserInfo', user)
             // Set user information.
             this.user.id = user.id
             this.user.name = user.name
             this.user.email = user.email
+            this.user.isAuthenticated = true
 
             // Store user information in local storage.
             localStorage.setItem('user.id', this.user.id)
             localStorage.setItem('user.name', this.user.name)
             localStorage.setItem('user.email', this.user.email)
+            localStorage.setItem('user.isAuthenticated', this.user.isAuthenticated)
 
-            console.log('User', this.user)
         },
 
         // Action to refresh the access token using the refresh token.
@@ -115,5 +113,13 @@ export const useUserStore = defineStore('user', {
                     this.removeToken()
                 })
         },
-    }
+    },
+    mutations: {
+        startLoading(state) {
+            state.isLoading = true;
+        },
+        endLoading(state) {
+            state.isLoading = false;
+        },
+    },
 })

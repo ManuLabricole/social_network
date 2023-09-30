@@ -24,6 +24,8 @@ def me(request):
         'id': request.user.id,     # Get the user's unique identifier.
         'name': request.user.name,  # Get the user's name.
         'email': request.user.email,  # Get the user's email address.
+        # Check if the user is authenticated.
+        'isAuthenticated': request.user.is_authenticated
     })
 
 # A view for user registration (sign-up)

@@ -1,79 +1,56 @@
-from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework import generics, status
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.http import JsonResponse
-from django.db.models import Q
+
+from userprofile.models import UserProfile
 
 from .models import Post
 from .serializers import PostSerializer
 
 
-class PostListView(generics.ListCreateAPIView):
-
+class FeedPostsListView(generics.ListAPIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
-
-    # Here we rewrite the create method to add the author to the post
-    def create(self, request):
-
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
-            return JsonResponse(serializer.data, status=201)
-
-        else:
-            print(serializer.errors)
-            response = JsonResponse(serializer.errors, status=400)
-            return response
-
-    # Here we rewrite the get method to filter if needed
-    def get_queryset(self):
-        # Start with all posts
-        queryset = Post.objects.all()
-
-        # Filter by search query if provided# type: ignore
-        search_query = self.request.query_params.get(  # type: ignore
-            'search_query', None)
-        if search_query:
-            queryset = queryset.filter(
-                Q(title__icontains=search_query) |
-                Q(body__icontains=search_query) |
-                # Assuming you have a username field in your user model
-                Q(author__name__icontains=search_query)
-            )
-            return queryset
-
-        # Filter by user_id if provided
-        user_id = self.kwargs.get('user_id', None)
-        if user_id:
-            queryset = queryset.filter(author__id=user_id)
-
-        return queryset
-
-
-class UserPostsListView(generics.ListAPIView):
-    serializer_class = PostSerializer
+    queryset = Post.objects.all()
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        print(Post.objects.filter(author=self.request.user))
-        return Post.objects.filter(author=self.request.user)
+        # Get the user's profile
+        user_profile = self.request.user.userprofile  # type: ignore
+
+        # Get the user's friends
+        friends = user_profile.friends.all()
+
+        # Fetch posts authored by the user and their friends
+        if friends:
+            friends_posts = Post.objects.filter(author__in=friends)
+            my_posts = Post.objects.filter(author=user_profile)
+
+            # Convert querysets to lists and combine
+            combined_posts = list(friends_posts) + list(my_posts)
+
+            # Sort the combined list by 'created_at' in descending order
+            sorted_posts = sorted(
+                combined_posts, key=lambda x: x.created_at, reverse=True)
+
+            return sorted_posts
+
+        else:
+            posts = Post.objects.all()
+            return posts
 
 
-class UserSpecificPostsListView(generics.ListAPIView):
+class UserPostsView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        print("All kwargs:", self.kwargs)
-        user_id = self.kwargs.get('user_id', None)
+        user_id = self.kwargs['user_id']
+        return Post.objects.filter(author__user__id=user_id)
 
-        print("Type of user_id:", type(user_id))
-        print("Request data:", self.request)
-        print("Request headers:", self.request.headers)
 
-        if user_id:
-            result = Post.objects.filter(author__id=user_id)
-            print("Query result:", result)
-            return result
-        else:
-            return Post.objects.all()
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
