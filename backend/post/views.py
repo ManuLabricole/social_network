@@ -1,10 +1,12 @@
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 from userprofile.models import UserProfile
 
-from .models import Post
+from .models import Post, PostLike, Comment
 from .serializers import PostSerializer
 
 
@@ -47,10 +49,39 @@ class UserPostsView(generics.ListCreateAPIView):
         user_id = self.kwargs['user_id']
         return Post.objects.filter(author__user__id=user_id)
 
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class TogglePostLike(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        print(request.data)
+        try:
+            post = Post.objects.get(id=pk)
+        except Post.DoesNotExist:
+            return Response({"error": "Post not found."}, status=404)
+
+        post_serializer = PostSerializer(post, context={'request': request})
+        # Check if the user has already liked the post
+        like = PostLike.objects.filter(
+            post=post, user=request.user.userprofile).first()
+
+        if like:
+            # If a like exists, remove it (unlike the post)
+            like.delete()
+        else:
+            # # If no like exists, create one (like the post)
+            PostLike.objects.create(post=post, user=request.user.userprofile)
+
+        post = post_serializer.data
+        return Response(
+            {
+                "message": "Request received",
+                "post": post
+            })
