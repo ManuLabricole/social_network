@@ -100,7 +100,6 @@
 
 <script>
 	import axios from 'axios';
-	import { useUserStore } from '@/stores/user';
 	export default {
 		name: 'FeedItem',
 		props: {
@@ -114,15 +113,14 @@
 				animateLike: false,
 			};
 		},
+
 		methods: {
 			likePost(postId) {
-				this.post.isLike = !this.post.isLike;
 				this.animateLike = true;
 				axios
-					.post(`/api/posts/${postId}/like`)
+					.post(`/api/v1/posts/${postId}/like`)
 					.then((response) => {
-						console.log(response.data);
-						this.isLike = true;
+						this.$emit('post-updated', response.data.post);
 					})
 					.catch((error) => {
 						console.log(error);
@@ -162,7 +160,7 @@
 		}
 		100% {
 			transform: rotate(0deg);
-			fill : transparent;
+			fill: transparent;
 		}
 	}
 

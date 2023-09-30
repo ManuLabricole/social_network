@@ -60,12 +60,14 @@ class UserPostsView(generics.ListCreateAPIView):
 class TogglePostLike(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, post_id):
+    def post(self, request, pk):
+        print(request.data)
         try:
-            post = Post.objects.get(id=post_id)
+            post = Post.objects.get(id=pk)
         except Post.DoesNotExist:
             return Response({"error": "Post not found."}, status=404)
 
+        post_serializer = PostSerializer(post, context={'request': request})
         # Check if the user has already liked the post
         like = PostLike.objects.filter(
             post=post, user=request.user.userprofile).first()
@@ -73,8 +75,13 @@ class TogglePostLike(APIView):
         if like:
             # If a like exists, remove it (unlike the post)
             like.delete()
-            return Response({"message": "Post unliked."})
+        else:
+            # # If no like exists, create one (like the post)
+            PostLike.objects.create(post=post, user=request.user.userprofile)
 
-        # If no like exists, create one (like the post)
-        PostLike.objects.create(post=post, user=request.user.userprofile)
-        return Response({"message": "Post liked."})
+        post = post_serializer.data
+        return Response(
+            {
+                "message": "Request received",
+                "post": post
+            })

@@ -44,6 +44,7 @@
 			</div>
 			<FeedItem
 				v-for="post in posts"
+				@post-updated="updatePost"
 				v-bind:key="post.id"
 				v-bind:post="post" />
 		</div>
@@ -113,6 +114,17 @@
 					.catch((error) => {
 						console.error('ERROR', error);
 					});
+			},
+			updatePost(updatedPost) {
+				// Find the index of the post that was updated
+				console.log('updatedPost', updatedPost);
+				const index = this.posts.findIndex(
+					(post) => post.id === updatedPost.id
+				);
+				if (index !== -1) {
+					// Update the post in the posts array
+					this.posts[index] = updatedPost;
+				}
 			},
 		},
 	};
