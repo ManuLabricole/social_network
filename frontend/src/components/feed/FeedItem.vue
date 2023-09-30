@@ -93,12 +93,13 @@
 			</div>
 		</div>
 		<p class="text-gray-500 text-xs italic mb-2 text-center">
-			Here the comment section
+			<CommentItem />
 		</p>
 	</div>
 </template>
 
 <script>
+	import CommentItem from './CommentItem.vue';
 	import axios from 'axios';
 	export default {
 		name: 'FeedItem',
@@ -107,6 +108,9 @@
 				type: Object,
 				required: true,
 			},
+		},
+		component: {
+			CommentItem,
 		},
 		data() {
 			return {
