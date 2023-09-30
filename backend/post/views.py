@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from userprofile.models import UserProfile
 
 from .models import Post, PostLike, Comment
-from .serializers import PostSerializer
+from .serializers import PostSerializer, CommentSerializer
 
 
 class FeedPostsListView(generics.ListAPIView):
@@ -57,7 +57,7 @@ class UserPostsView(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class TogglePostLike(APIView):
+class PostLikeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
@@ -85,3 +85,23 @@ class TogglePostLike(APIView):
                 "message": "Request received",
                 "post": post
             })
+
+
+class CreateCommentView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        post = Post.objects.get(pk=self.kwargs['post_id'])
+        # type: ignore
+        serializer.save(post=post, author=self.request.user.userprofile)
+
+
+class ListCommentsView(generics.ListAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        post = Post.objects.get(pk=self.kwargs['post_id'])
+        return post.comments.all()  # type: ignore
