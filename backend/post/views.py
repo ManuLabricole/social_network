@@ -94,8 +94,10 @@ class CreateCommentView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         post = Post.objects.get(pk=self.kwargs['post_id'])
-        # type: ignore
-        serializer.save(post=post, author=self.request.user.userprofile)
+        serializer.save(
+            post=post,
+            author=self.request.user.userprofile  # type: ignore
+        )
 
 
 class ListCommentsView(generics.ListAPIView):
