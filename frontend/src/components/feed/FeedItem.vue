@@ -35,9 +35,9 @@
 							stroke-width="1.5"
 							stroke="currentColor"
 							:class="[
-								isLike ? 'liked' : 'unliked',
+								post.isLike ? 'liked' : 'unliked',
 								animateLike
-									? isLike
+									? post.isLike
 										? 'like-animation'
 										: 'unlike-animation'
 									: '',
@@ -108,7 +108,7 @@
 				type: Object,
 				required: true,
 			},
-	},
+		},
 		data() {
 			return {
 				animateLike: false,
@@ -116,16 +116,17 @@
 		},
 		methods: {
 			likePost(postId) {
-				// this.isLike = !this.isLike;
-				// axios
-				// 	.post(`/api/posts/${postId}/like`)
-				// 	.then((response) => {
-				// 		console.log(response.data);
-				// 		this.isLike = true;
-				// 	})
-				// 	.catch((error) => {
-				// 		console.log(error);
-				// 	});
+				this.post.isLike = !this.post.isLike;
+				this.animateLike = true;
+				axios
+					.post(`/api/posts/${postId}/like`)
+					.then((response) => {
+						console.log(response.data);
+						this.isLike = true;
+					})
+					.catch((error) => {
+						console.log(error);
+					});
 			},
 		},
 	};
@@ -133,6 +134,7 @@
 <style scoped>
 	@keyframes pop {
 		0% {
+			fill: transparent;
 			transform: scale(1);
 		}
 		50% {
@@ -140,12 +142,14 @@
 		}
 		100% {
 			transform: scale(1);
+			fill: red;
 		}
 	}
 
 	@keyframes shake {
 		0% {
 			transform: rotate(0deg);
+			fill: red;
 		}
 		25% {
 			transform: rotate(-5deg);
@@ -158,6 +162,7 @@
 		}
 		100% {
 			transform: rotate(0deg);
+			fill : transparent;
 		}
 	}
 
