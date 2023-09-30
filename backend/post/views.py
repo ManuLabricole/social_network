@@ -49,7 +49,6 @@ class UserPostsView(generics.ListCreateAPIView):
         user_id = self.kwargs['user_id']
         return Post.objects.filter(author__user__id=user_id)
 
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

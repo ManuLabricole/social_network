@@ -23,6 +23,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     author = UserProfileSerializer(read_only=True)
+    isLike = serializers.SerializerMethodField()
+
     likes = PostLikeSerializer(
         source='postlike_set', many=True, read_only=True)
     comments = CommentSerializer(
@@ -31,8 +33,12 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id', 'author', 'title', 'body', 'created_at',
-                  'created_at_formatted', 'attachment', 'likes', 'comments')
+                  'created_at_formatted', 'attachment', 'likes', 'comments', 'isLike')
 
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user.userprofile
         return super().create(validated_data)
+
+    def get_isLike(self, obj):
+        user_profile = self.context['request'].user.userprofile
+        return PostLike.objects.filter(post=obj, user=user_profile).exists()

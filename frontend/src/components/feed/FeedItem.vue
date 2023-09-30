@@ -15,8 +15,11 @@
 					<strong>{{ post.author.user.name }}</strong>
 				</p>
 			</div>
-			<p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
+			<p class="text-gray-600 text-center">
+				{{ post.created_at_formatted }} ago
+			</p>
 		</div>
+		<p class="text-2xl font-semibold mb-4 text-center">{{ post.title }}</p>
 		<img
 			src="https://images.unsplash.com/photo-1661956602868-6ae368943878?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80"
 			class="w-full rounded-lg" />
@@ -24,18 +27,29 @@
 		<div class="my-6 flex justify-between">
 			<div class="flex space-x-6">
 				<div class="flex items-center space-x-2">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="w-6 h-6">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-					</svg>
+					<button @click="likePost(post.id)">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							:class="[
+								isLike ? 'liked' : 'unliked',
+								animateLike
+									? isLike
+										? 'like-animation'
+										: 'unlike-animation'
+									: '',
+							]"
+							class="w-6 h-6">
+							<path
+								class=""
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+						</svg>
+					</button>
 
 					<span class="text-gray-500 text-xs"
 						>{{ post.likes.length }}
@@ -78,10 +92,15 @@
 				</svg>
 			</div>
 		</div>
+		<p class="text-gray-500 text-xs italic mb-2 text-center">
+			Here the comment section
+		</p>
 	</div>
 </template>
 
 <script>
+	import axios from 'axios';
+	import { useUserStore } from '@/stores/user';
 	export default {
 		name: 'FeedItem',
 		props: {
@@ -89,10 +108,74 @@
 				type: Object,
 				required: true,
 			},
-		},
+	},
 		data() {
-			// console.log('FEEDITEM', this.post.author.user.id);
-			return {};
+			return {
+				animateLike: false,
+			};
+		},
+		methods: {
+			likePost(postId) {
+				// this.isLike = !this.isLike;
+				// axios
+				// 	.post(`/api/posts/${postId}/like`)
+				// 	.then((response) => {
+				// 		console.log(response.data);
+				// 		this.isLike = true;
+				// 	})
+				// 	.catch((error) => {
+				// 		console.log(error);
+				// 	});
+			},
 		},
 	};
 </script>
+<style scoped>
+	@keyframes pop {
+		0% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.2);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+
+	@keyframes shake {
+		0% {
+			transform: rotate(0deg);
+		}
+		25% {
+			transform: rotate(-5deg);
+		}
+		50% {
+			transform: rotate(5deg);
+		}
+		75% {
+			transform: rotate(-5deg);
+		}
+		100% {
+			transform: rotate(0deg);
+		}
+	}
+
+	.liked {
+		fill: red;
+		stroke: red;
+	}
+
+	.unliked {
+		fill: transparent;
+		stroke: gray;
+	}
+
+	.like-animation {
+		animation: pop 0.5s;
+	}
+
+	.unlike-animation {
+		animation: shake 0.5s;
+	}
+</style>
