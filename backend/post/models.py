@@ -26,7 +26,7 @@ class PostAttachment(models.Model):
 
 class Post(models.Model):
     def __str__(self):
-        return self.title
+        return f"{self.title} by {self.author}"
     # Unique identifier for each post.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 

@@ -2,9 +2,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
-
-from userprofile.models import UserProfile
+from rest_framework.exceptions import NotFound
 
 from .models import Post, PostLike, Comment
 from .serializers import PostSerializer, CommentSerializer
@@ -57,6 +55,18 @@ class UserPostsView(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+class PostDetailView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        try:
+            return Post.objects.get(id=self.kwargs['pk'])
+        except Post.DoesNotExist:
+            raise NotFound(detail="Post not found", code=404)
+
+
 class PostLikeView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -92,12 +102,27 @@ class CreateCommentView(generics.CreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+
+        post = Post.objects.get(pk=self.kwargs['pk'])
+        print(post)
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            print(serializer.validated_data)
+            serializer.validated_data['post'] = post
+            return super().create(request, *args, **kwargs)
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def perform_create(self, serializer):
-        print(self.kwargs['post_id'])
-        post = Post.objects.get(pk=self.kwargs['post_id'])
+        print("request", self.request.data)  # type: ignore
+        post = Post.objects.get(pk=self.kwargs['pk'])
         serializer.save(
+            author=self.request.user.userprofile,  # type: ignore
             post=post,
-            author=self.request.user.userprofile  # type: ignore
+            content=self.request.data['content']  # type: ignore
         )
 
 

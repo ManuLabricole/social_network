@@ -48,6 +48,7 @@
 				required: true,
 			},
 		},
+		emits: ['commentAdded'], // Declare the custom event here
 		data() {
 			return {
 				userStore: useUserStore(),
@@ -63,18 +64,19 @@
 			console.log('isCommented', this.userHasCommented);
 		},
 		methods: {
-			addComment(postId) {
-				console.log(this.newComment);
+			addComment() {
 				axios({
 					method: 'post',
 					url: `/api/v1/posts/${this.postId}/comment`,
 					data: {
 						content: this.newComment,
+						post: this.postId,
 					},
 				})
 					.then((response) => {
-						this.comments.push(response.data.comment);
+						this.$emit('commentAdded');
 						this.newComment = '';
+						this.userHasCommented = true;
 					})
 					.catch((error) => {
 						console.log(error);

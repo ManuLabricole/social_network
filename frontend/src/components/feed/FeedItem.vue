@@ -95,7 +95,8 @@
 		<p class="text-gray-500 text-xs italic mb-2 text-center"></p>
 		<CommentItem
 			:postId="post.id"
-			:comments="post.comments" />
+			:comments="post.comments"
+			@comment-added="updatePostComment" />
 	</div>
 </template>
 
@@ -113,6 +114,7 @@
 		components: {
 			CommentItem,
 		},
+		emits: ['post-like-updated', 'post-comment-updated'],
 		data() {
 			return {
 				animateLike: false,
@@ -125,11 +127,14 @@
 				axios
 					.post(`/api/v1/posts/${postId}/like`)
 					.then((response) => {
-						this.$emit('post-updated', response.data.post);
+						this.$emit('post-like-updated', response.data.post);
 					})
 					.catch((error) => {
 						console.log(error);
 					});
+			},
+			updatePostComment(post) {
+				this.$emit('post-comment-updated');
 			},
 		},
 	};
