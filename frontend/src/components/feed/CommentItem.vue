@@ -1,6 +1,5 @@
 <template>
-	<div 
-	v-if="comments.length > 0">
+	<div v-if="comments.length > 0">
 		<div
 			v-for="comment in comments.slice(-5)"
 			class="flex mt-4 items-center">
@@ -16,6 +15,8 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div v-if="!userHasCommented">
 		<div class="flex items-center mt-3">
 			<img
 				src="https://i.pravatar.cc/300?img=70"
@@ -27,7 +28,7 @@
 			<button
 				@click="addComment"
 				class="ml-3 px-4 py-2 bg-blue-600 text-white rounded-lg">
-				Post
+				add
 			</button>
 		</div>
 	</div>
@@ -46,24 +47,19 @@
 			return {
 				userStore: useUserStore(),
 				newComment: '',
+				userHasCommented: false,
 			};
 		},
-		watch: {
-			comments: {
-				handler() {
-					// Assuming each comment has a 'userId' field to identify the user who commented
-					const userId = this.userStore.user.id;
-					this.userHasCommented = this.comments.some(
-						(comment) => comment.userId === userId
-					);
-				},
-				deep: true,
-				immediate: true,
-			},
-	},
+		mounted() {
+			// Assuming each comment has a 'userId' field to identify the user who commented
+			this.userHasCommented = this.comments.some(
+				(comment) => comment.author.user.id === this.userStore.user.id
+			);
+			console.log('isCommented', this.userHasCommented);
+		},
 		methods: {
 			addComment() {
-				 console.log(this.newComment);
+				console.log(this.newComment);
 			},
 		},
 	};
