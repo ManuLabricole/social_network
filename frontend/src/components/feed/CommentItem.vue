@@ -1,5 +1,6 @@
 <template>
-	<div v-if="comments.length > 0">
+	<div 
+	v-if="comments.length > 0">
 		<div
 			v-for="comment in comments.slice(-5)"
 			class="flex mt-4 items-center">
@@ -32,6 +33,7 @@
 	</div>
 </template>
 <script>
+	import { useUserStore } from '../../stores/user';
 	export default {
 		name: 'CommentItem',
 		props: {
@@ -42,8 +44,27 @@
 		},
 		data() {
 			return {
+				userStore: useUserStore(),
 				newComment: '',
 			};
+		},
+		watch: {
+			comments: {
+				handler() {
+					// Assuming each comment has a 'userId' field to identify the user who commented
+					const userId = this.userStore.user.id;
+					this.userHasCommented = this.comments.some(
+						(comment) => comment.userId === userId
+					);
+				},
+				deep: true,
+				immediate: true,
+			},
+	},
+		methods: {
+			addComment() {
+				 console.log(this.newComment);
+			},
 		},
 	};
 </script>
