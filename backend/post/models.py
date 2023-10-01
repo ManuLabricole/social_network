@@ -7,8 +7,6 @@ from userprofile.models import UserProfile
 # Model for storing post attachments, such as images.
 
 
-
-
 class PostAttachment(models.Model):
     def __str__(self):
         return str(self.id)
@@ -28,7 +26,7 @@ class PostAttachment(models.Model):
 
 class Post(models.Model):
     def __str__(self):
-        return self.title
+        return f"{self.title} by {self.author}"
     # Unique identifier for each post.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -58,6 +56,8 @@ class Post(models.Model):
     # To be added in the future:
     # - Likes: To track users who liked this post.
     # - Likes count: To count the number of likes on this post.
+
+
 class PostLike(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -68,7 +68,8 @@ class PostLike(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

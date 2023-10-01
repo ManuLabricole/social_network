@@ -44,7 +44,8 @@
 			</div>
 			<FeedItem
 				v-for="post in posts"
-				@post-updated="updatePost"
+				@post-like-updated="updatePostLike"
+				@post-comment-updated="updatePostComment"
 				v-bind:key="post.id"
 				v-bind:post="post" />
 		</div>
@@ -115,7 +116,7 @@
 						console.error('ERROR', error);
 					});
 			},
-			updatePost(updatedPost) {
+			updatePostLike(updatedPost) {
 				// Find the index of the post that was updated
 				console.log('updatedPost', updatedPost);
 				const index = this.posts.findIndex(
@@ -126,6 +127,11 @@
 					this.posts[index] = updatedPost;
 				}
 			},
+			updatePostComment() {
+				// Find the index of the post that was updated
+				this.fetchFeed();
+			},
+
 		},
 	};
 </script>
