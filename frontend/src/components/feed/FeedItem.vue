@@ -92,9 +92,8 @@
 				</svg>
 			</div>
 		</div>
-		<p class="text-gray-500 text-xs italic mb-2 text-center">
-			<CommentItem />
-		</p>
+		<p class="text-gray-500 text-xs italic mb-2 text-center"></p>
+		<CommentItem :comments="post.comments" />
 	</div>
 </template>
 
@@ -109,7 +108,7 @@
 				required: true,
 			},
 		},
-		component: {
+		components: {
 			CommentItem,
 		},
 		data() {

@@ -16,6 +16,9 @@ class PostLikeSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+
+    author = UserProfileSerializer(read_only=True)
+
     class Meta:
         model = Comment
         fields = '__all__'
