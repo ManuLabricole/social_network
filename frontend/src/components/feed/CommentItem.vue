@@ -34,12 +34,17 @@
 	</div>
 </template>
 <script>
+	import axios from 'axios';
 	import { useUserStore } from '../../stores/user';
 	export default {
 		name: 'CommentItem',
 		props: {
 			comments: {
 				type: Object,
+				required: true,
+			},
+			postId: {
+				type: String,
 				required: true,
 			},
 		},
@@ -58,8 +63,22 @@
 			console.log('isCommented', this.userHasCommented);
 		},
 		methods: {
-			addComment() {
+			addComment(postId) {
 				console.log(this.newComment);
+				axios({
+					method: 'post',
+					url: `/api/v1/posts/${this.postId}/comment`,
+					data: {
+						content: this.newComment,
+					},
+				})
+					.then((response) => {
+						this.comments.push(response.data.comment);
+						this.newComment = '';
+					})
+					.catch((error) => {
+						console.log(error);
+					});
 			},
 		},
 	};

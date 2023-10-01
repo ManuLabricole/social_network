@@ -93,6 +93,7 @@ class CreateCommentView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
+        print(self.kwargs['post_id'])
         post = Post.objects.get(pk=self.kwargs['post_id'])
         serializer.save(
             post=post,
