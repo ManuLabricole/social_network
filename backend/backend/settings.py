@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+
 # ignore this line if you don't have python-dotenv installed
 from dotenv import load_dotenv
 
@@ -31,7 +32,7 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']  # Instead of your actual secret key
+SECRET_KEY = os.environ["SECRET_KEY"]  # Instead of your actual secret key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -41,91 +42,90 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = "account.User"
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=180),
-    'ROTATE_REFRESH_TOKENS': False,
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=180),
+    "ROTATE_REFRESH_TOKENS": False,
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
-print(os.environ['FRONTEND_URL'])
+print(os.environ["FRONTEND_URL"])
 CORS_ALLOWED_ORIGINS = [
-    os.environ['FRONTEND_URL'],
+    os.environ["FRONTEND_URL"],
 ]
 
 CRSF_TRUSTED_ORIGINS = [
-    os.environ['FRONTEND_URL'],
+    os.environ["FRONTEND_URL"],
 ]
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     # Specific Modules
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'corsheaders',
-
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "corsheaders",
     # Specific Apps
-    'account',
-    'userprofile',
-    'post',
-    'friendship',
+    "account",
+    "userprofile",
+    "post",
+    "friendship",
+    "chat",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     # Make sure this is after CsrfViewMiddleware.
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = "backend.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = "backend.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -135,16 +135,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -152,9 +152,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -164,9 +164,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
