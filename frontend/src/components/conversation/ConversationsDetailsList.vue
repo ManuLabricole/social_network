@@ -4,7 +4,9 @@
 			<div
 				class="space-y-6"
 				v-for="conversation in conversationStore.conversations">
-				<ConversationDetails :conversation="conversation" />
+				<ConversationDetails
+					:conversation="conversation"
+					:currentUserId="conversationStore.userId" />
 			</div>
 		</div>
 	</div>
