@@ -55,6 +55,12 @@ FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_net
 			MessageSent,
 			MessageReceived,
 		},
+		props: {
+			activeConversationId: {
+				type: [String, Number],
+				required: false,
+			},
+		},
 		setup() {
 			const conversationStore = useConversationStore();
 			return {
