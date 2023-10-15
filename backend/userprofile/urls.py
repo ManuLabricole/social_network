@@ -11,5 +11,5 @@ urlpatterns = [
     path("friends/me/", views.fetch_friends, name="fetch-friends"),
     path("<uuid:user_id>/posts/", include("post.urls")),
     path("friendship/", include("friendship.urls")),
-    path("conversations/me/", include("chat.urls")),
+    path("conversations/", include("chat.urls")),
 ]

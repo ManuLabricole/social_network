@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import Conversation, ConversationMessage
@@ -11,16 +12,18 @@ class ListConversationsView(generics.ListAPIView):
 
     def get_queryset(self):
         print(self.request.user)
-        return Conversation.objects.filter(user=self.request.user.userprofile) # type: ignore
+        return Conversation.objects.filter(user=self.request.user.userprofile)  # type: ignore
 
 
-# Retrieve a single conversation along with its messages
-class RetrieveConversationView(generics.RetrieveAPIView):
-    serializer_class = ConversationSerializer  # You might need a different serializer to include messages
+# Retrieve a single conversation along with its messages# Retrieve messages for a specific conversation
+class RetrieveMessagesView(generics.ListAPIView):
+    serializer_class = ConversationMessageSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Conversation.objects.filter(user=self.request.user)
+        conversation_id = self.kwargs["conversation_id"]
+        conversation = get_object_or_404(Conversation, id=conversation_id)
+        return ConversationMessage.objects.filter(conversation=conversation)
 
 
 # Create a new message in a conversation
