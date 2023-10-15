@@ -5,12 +5,17 @@ import axios from 'axios';
 
 export const useConversationStore = defineStore('conversation', {
     state: () => ({
+        userId: null,
         conversations: [],
         selectedConversation: null,
         messages: [],
         isLoading: false,
     }),
     actions: {
+        setUserId(userId) {
+            this.userId = userId;
+            console.log(userId);
+        },
         async fetchConversations() {
             this.isLoading = true;
             try {
@@ -24,8 +29,6 @@ export const useConversationStore = defineStore('conversation', {
             finally {
                 this.isLoading = false;
             }
-            // Fetch conversations from API and update state
-            // this.conversations = await apiCallToFetchConversations();
         },
         async fetchMessages(conversationId) {
             // Fetch messages for a specific conversation

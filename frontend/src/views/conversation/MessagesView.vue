@@ -6,8 +6,11 @@
 </template>
 
 <script>
-	import ConversationDetailsList from '../../components/conversation/ConversationsDetailsList.vue';
-	import Conversation from '../../components/conversation/Conversation.vue';
+	import ConversationDetailsList from '@/components/conversation/ConversationsDetailsList.vue';
+	import Conversation from '@/components/conversation/Conversation.vue';
+	import { useConversationStore } from '@/stores/conversationStore';
+	import { useUserStore } from '@/stores/user';
+
 	export default {
 		name: 'ConversationView',
 		components: {
@@ -15,9 +18,12 @@
 			Conversation,
 		},
 		setup() {
+			const conversationStore = useConversationStore();
+			const userStore = useUserStore();
+			conversationStore.setUserId(userStore.user.id);
 			return {};
 		},
 	};
 </script>
 
-<style lang="postcss" scoped></style>
+<style scoped></style>
