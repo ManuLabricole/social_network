@@ -21,7 +21,6 @@ class ConversationSerializer(serializers.ModelSerializer):
         
         if delta < timedelta(minutes=1):
             return "now"
-
         elif delta < timedelta(minutes=60):
             return f"{delta.seconds // 60} minutes ago"
         elif delta < timedelta(hours=24):
