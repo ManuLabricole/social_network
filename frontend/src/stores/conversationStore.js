@@ -6,9 +6,21 @@ export const useConversationStore = defineStore('conversation', {
         conversations: [],
         selectedConversation: null,
         messages: [],
+        isLoading: false,
     }),
     actions: {
         async fetchConversations() {
+            this.isLoading = true;
+            try {
+                const response = await this.$axios.get('/api/v1/conversations/');
+                this.conversations = response.data;
+            }
+            catch (err) {
+                console.log(err);
+            }
+            finally {
+                this.isLoading = false;
+            }
             // Fetch conversations from API and update state
             // this.conversations = await apiCallToFetchConversations();
         },
