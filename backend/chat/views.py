@@ -23,7 +23,8 @@ class RetrieveMessagesView(generics.ListAPIView):
     def get_queryset(self):
         conversation_id = self.kwargs["conversation_id"]
         conversation = get_object_or_404(Conversation, id=conversation_id)
-        return ConversationMessage.objects.filter(conversation=conversation)
+        messages = ConversationMessage.objects.filter(conversation=conversation)      
+        return messages
 
 
 # Create a new message in a conversation

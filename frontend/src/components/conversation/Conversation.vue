@@ -1,16 +1,17 @@
 <template>
-	<div class="main-center col-span-3 space-y-4">
+	<div
+		class="main-center col-span-3 space-y-4"
+		v-if="!conversationStore.isLoading">
 		<div class="bg-white border border-gray-200 rounded-lg">
-			<div class="flex flex-col flex-grow p-4">
-				<MessageReceived />
-				<MessageReceived />
-				<MessageSent />
-				<MessageReceived />
-				<!-- 
-    FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_network/frontend/src/components/conversation/Conversation.vue
-    This component renders the conversation view and includes the MessageSent component.
--->
-				<MessageSent />
+			<div
+				class="flex flex-col flex-grow p-4"
+				v-for="message in conversationStore.messages">
+				<MessageSent
+					v-if="message.sender.user.id === userStore.user.id"
+					:body="message.body" />
+				<MessageReceived
+					v-else
+					:body="message.body" />
 			</div>
 		</div>
 
@@ -32,10 +33,6 @@
 	</div>
 </template>
 
-<!--
-FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_network/frontend/src/components/conversation/Conversation.vue
--->
-
 <script>
 	/**
 	 * @name ConversationView
@@ -45,9 +42,10 @@ FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_net
 	 * @example
 	 * <ConversationView />
 	 */
-	import MessageSent from './MessageSent.vue';
-	import MessageReceived from './MessageReceived.vue';
 	import { useConversationStore } from '@/stores/conversationStore';
+	import { useUserStore } from '@/stores/user';
+	import MessageReceived from './MessageReceived.vue';
+	import MessageSent from './MessageSent.vue';
 
 	export default {
 		name: 'ConversationView',
@@ -63,8 +61,11 @@ FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_net
 		},
 		setup() {
 			const conversationStore = useConversationStore();
+			const userStore = useUserStore();
+			console.log(conversationStore.messages);
 			return {
-				conversation: conversationStore.conversation,
+				conversationStore,
+				userStore,
 			};
 		},
 	};

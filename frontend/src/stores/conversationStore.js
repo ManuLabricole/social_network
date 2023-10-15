@@ -38,8 +38,17 @@ export const useConversationStore = defineStore('conversation', {
             }
         },
         async fetchMessages(conversationId) {
-            // Fetch messages for a specific conversation
-            // this.messages = await apiCallToFetchMessages(conversationId);
+            try {
+                this.isLoading = true;
+                const response = await axios.get(`/api/v1/users/conversations/${conversationId}/`);
+                this.messages = response.data;
+                console.log(this.messages);
+            } catch (err) {
+                console.log(err);
+            }
+            finally {
+                this.isLoading = false;
+            }
         },
         async sendMessage(conversationId, message) {
             // Send a new message

@@ -18,7 +18,7 @@ class ConversationSerializer(serializers.ModelSerializer):
         now = timezone.now()  # Make it timezone-aware
         modified_at = obj.modified_at
         delta = now - modified_at
-        
+
         if delta < timedelta(minutes=1):
             return "now"
         elif delta < timedelta(minutes=60):
@@ -36,6 +36,10 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 
 class ConversationMessageSerializer(serializers.ModelSerializer):
+    conversation = ConversationSerializer()  # Include conversation details
+    sender = SimpleUserProfileSerializer()  # Include user details
+    receiver = SimpleUserProfileSerializer()  # Include user details
+
     class Meta:
         model = ConversationMessage
-        fields = "__all__"
+        fields = ["conversation", "sender", "receiver", "body", "created_at"]

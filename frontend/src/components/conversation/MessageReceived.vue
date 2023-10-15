@@ -8,8 +8,7 @@
 		<div>
 			<div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
 				<p class="text-sm">
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-					eiusmod tempor incididunt ut labore et dolore magna aliqua.
+					{{ body }}
 				</p>
 			</div>
 			<span class="text-xs text-gray-500 leading-none">2 min ago</span>
@@ -20,6 +19,12 @@
 <script>
 	export default {
 		name: 'MessageReceived',
+		props: {
+			body: {
+				type: String,
+				required: true,
+			},
+		},
 		setup() {
 			return {};
 		},

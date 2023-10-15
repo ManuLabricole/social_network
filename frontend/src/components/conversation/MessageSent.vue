@@ -2,7 +2,7 @@
 	<div class="flex w-full mt-2 space-x-3 max-w-md ml-auto justify-end">
 		<div
 			class="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg max-w-[100%] whitespace-normal">
-			<p class="text-sm break-words">Message sent !</p>
+			<p class="text-sm break-words">{{ body }}</p>
 		</div>
 		<span
 			class="text-xs text-gray-500 leading-none absolute bottom-0 left-0 ml-3 mb-2"
@@ -18,9 +18,15 @@
 </template>
 
 <script>
-export default {
-        name: 'MessageSent',
-    };
+	export default {
+		name: 'MessageSent',
+		props: {
+			body: {
+				type: String,
+				required: true,
+			},
+		},
+	};
 </script>
 
 <style scoped></style>
