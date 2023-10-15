@@ -1,5 +1,5 @@
 <template>
-	<div class="flex items-center justify-between">
+	<div class="flex items-center justify-between mt-2">
 		<div class="flex items-center space-x-2">
 			<img
 				src="https://i.pravatar.cc/300?img=70"
@@ -14,6 +14,12 @@
 <script>
 	export default {
 		name: 'ConversationDetails',
+		props: {
+			conversation: {
+				type: Object,
+				required: true,
+			},
+		},
 	};
 </script>
 

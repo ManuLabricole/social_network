@@ -4,7 +4,7 @@ from userprofile.serializers import SimpleUserProfileSerializer
 
 
 class ConversationSerializer(serializers.ModelSerializer):
-    other_user = SimpleUserProfileSerializer(read_only=True)
+    user = SimpleUserProfileSerializer(many=True)  # Include user details
 
     class Meta:
         model = Conversation

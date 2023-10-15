@@ -10,7 +10,8 @@ class ListConversationsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Conversation.objects.filter(user=self.request.user)
+        print(self.request.user)
+        return Conversation.objects.filter(user=self.request.user.userprofile) # type: ignore
 
 
 # Retrieve a single conversation along with its messages
