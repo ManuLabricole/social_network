@@ -6,7 +6,7 @@
 				<MessageReceived />
 				<MessageSent />
 				<MessageReceived />
-<!-- 
+				<!-- 
     FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_network/frontend/src/components/conversation/Conversation.vue
     This component renders the conversation view and includes the MessageSent component.
 -->
@@ -37,26 +37,31 @@ FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_net
 -->
 
 <script>
-    /**
-     * @name ConversationView
-     * @description A component that displays a conversation between two users.
-     * @component
-     * 
-     * @example
-     * <ConversationView />
-     */
-    import MessageSent from './MessageSent.vue';
-    import MessageReceived from './MessageReceived.vue';
-    export default {
-        name: 'ConversationView',
-        components: {
-            MessageSent,
-            MessageReceived,
-        },
-        setup() {
-            return {};
-        },
-    };
+	/**
+	 * @name ConversationView
+	 * @description A component that displays a conversation between two users.
+	 * @component
+	 *
+	 * @example
+	 * <ConversationView />
+	 */
+	import MessageSent from './MessageSent.vue';
+	import MessageReceived from './MessageReceived.vue';
+	import { useConversationStore } from '@/stores/conversationStore';
+
+	export default {
+		name: 'ConversationView',
+		components: {
+			MessageSent,
+			MessageReceived,
+		},
+		setup() {
+			const conversationStore = useConversationStore();
+			return {
+				conversation: conversationStore.conversation,
+			};
+		},
+	};
 </script>
 
 <style lang="scss" scoped></style>
