@@ -1,5 +1,7 @@
 // conversationStore.js
 import { defineStore } from 'pinia';
+import axios from 'axios';
+
 
 export const useConversationStore = defineStore('conversation', {
     state: () => ({
@@ -12,7 +14,7 @@ export const useConversationStore = defineStore('conversation', {
         async fetchConversations() {
             this.isLoading = true;
             try {
-                const response = await this.$axios.get('/api/v1/conversations/');
+                const response = await axios.get('/api/v1/users/conversations/me/');
                 this.conversations = response.data;
                 console.log(response);
             }
@@ -21,7 +23,6 @@ export const useConversationStore = defineStore('conversation', {
             }
             finally {
                 this.isLoading = false;
-                console.log(this.isLoading);
             }
             // Fetch conversations from API and update state
             // this.conversations = await apiCallToFetchConversations();

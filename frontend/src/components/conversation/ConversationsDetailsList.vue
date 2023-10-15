@@ -14,7 +14,6 @@
 <script>
 	import ConversationDetails from './ConversationDetails.vue';
 	import { useConversationStore } from '@/stores/conversationStore';
-	import { onMounted } from 'vue';
 
 	export default {
 		name: 'ConversationDetailsList',
@@ -28,10 +27,7 @@
 			};
 		},
 		mounted() {
-			onMounted(() => {
-				this.conversationStore.fetchConversations();
-				console.log('mounted');
-			});
+			this.conversationStore.fetchConversations();
 		},
 	};
 </script>
