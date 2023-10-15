@@ -6,6 +6,10 @@
 				<MessageReceived />
 				<MessageSent />
 				<MessageReceived />
+<!-- 
+    FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_network/frontend/src/components/conversation/Conversation.vue
+    This component renders the conversation view and includes the MessageSent component.
+-->
 				<MessageSent />
 			</div>
 		</div>
@@ -28,19 +32,31 @@
 	</div>
 </template>
 
+<!--
+FILEPATH: /Users/manulabricole/Documents/Bricolerie/web_dev_tutorials/social_network/frontend/src/components/conversation/Conversation.vue
+-->
+
 <script>
-	import MessageSent from './MessageSent.vue';
-	import MessageReceived from './MessageReceived.vue';
-	export default {
-		name: 'ConversationView',
-		components: {
-			MessageSent,
-			MessageReceived,
-		},
-		setup() {
-			return {};
-		},
-	};
+    /**
+     * @name ConversationView
+     * @description A component that displays a conversation between two users.
+     * @component
+     * 
+     * @example
+     * <ConversationView />
+     */
+    import MessageSent from './MessageSent.vue';
+    import MessageReceived from './MessageReceived.vue';
+    export default {
+        name: 'ConversationView',
+        components: {
+            MessageSent,
+            MessageReceived,
+        },
+        setup() {
+            return {};
+        },
+    };
 </script>
 
 <style lang="scss" scoped></style>
