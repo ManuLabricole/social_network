@@ -8,7 +8,9 @@
 				@click="setActiveConversation(conversation.id)">
 				<ConversationDetails
 					:conversation="conversation"
-					:isSelected="activeConversationId === conversation.id"
+					:isSelected="
+						conversationStore.selectedConversation.id === conversation.id
+					"
 					:currentUserId="conversationStore.userId" />
 			</div>
 		</div>
@@ -16,7 +18,6 @@
 </template>
 
 <script>
-	import { ref } from 'vue';
 	import ConversationDetails from './ConversationDetails.vue';
 	import { useConversationStore } from '@/stores/conversationStore';
 
@@ -27,27 +28,18 @@
 		},
 		setup() {
 			const conversationStore = useConversationStore();
-			const activeConversationId = ref(null); // Define it here
 
 			const setActiveConversation = (id) => {
-				activeConversationId.value = id;
-				// Emit the event here if needed
+				conversationStore.setSelectedConversation(id); // Update the store
 			};
 
 			return {
 				conversationStore,
-				activeConversationId, // Make it available to the template
 				setActiveConversation, // Make the method available to the template
 			};
 		},
 		mounted() {
 			this.conversationStore.fetchConversations();
-		},
-		methods: {
-			setActiveConversation(id) {
-				this.activeConversationId = id;
-				this.$emit('active-conversation-changed', id);
-			},
 		},
 	};
 </script>

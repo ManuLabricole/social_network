@@ -21,7 +21,7 @@ export const useConversationStore = defineStore('conversation', {
             try {
                 const response = await axios.get('/api/v1/users/conversations/me/');
                 this.conversations = response.data;
-                console.log(response);
+                this.setSelectedConversation(this.conversations[0].id);
             }
             catch (err) {
                 console.log(err);
@@ -38,8 +38,13 @@ export const useConversationStore = defineStore('conversation', {
             // Send a new message
             // await apiCallToSendMessage(conversationId, message);
         },
-        selectConversation(conversation) {
-            this.selectedConversation = conversation;
+        setSelectedConversation(conversationId) {
+            const conversation = this.conversations.find(c => c.id === conversationId);
+            if (conversation) {
+                this.selectedConversation = conversation;
+                // Optionally, fetch messages for the selected conversation
+                this.fetchMessages(conversationId);
+            }
         },
     },
 });

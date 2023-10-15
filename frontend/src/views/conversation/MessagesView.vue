@@ -1,7 +1,7 @@
 <template>
 	<div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-		<ConversationDetailsList
-			@active-conversation-changed="setActiveConversation" />
+		<ConversationDetailsList/>
+
 		<Conversation :activeConversationId="activeConversationId" />
 	</div>
 </template>
@@ -22,18 +22,21 @@
 			const conversationStore = useConversationStore();
 			const userStore = useUserStore();
 			conversationStore.setUserId(userStore.user.id);
-			return {};
+
+			function setActiveConversation(conversationId) {
+				conversationStore.setSelectedConversation(conversationId);
+				console.log('active conversation changed', conversationId);
+			}
+
+			return {
+				setActiveConversation,
+			};
 		},
+
 		data() {
 			return {
 				activeConversationId: null,
 			};
-		},
-		methods: {
-			setActiveConversation(id) {
-				this.activeConversationId = id;
-				console.log('active conversation changed', id);
-			},
 		},
 	};
 </script>

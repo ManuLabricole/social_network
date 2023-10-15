@@ -11,12 +11,9 @@
 			isSelected
 				? 'border-b-4 border-purple-500'
 				: 'border-b-4 border-gray-300',
+			isSelected ? 'shadow-purple' : 'shadow-gray',
 		]"
-		:style="
-			isSelected
-				? 'box-shadow: 0px 4px 4px rgba(128, 0, 128, 0.1)'
-				: 'box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1)'
-		">
+		style="box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1)">
 		<div class="flex items-center space-x-2">
 			<img
 				src="https://i.pravatar.cc/300?img=70"
@@ -64,4 +61,11 @@
 	};
 </script>
 
-<style scoped></style>
+<style scoped>
+	.shadow-purple {
+		box-shadow: 0px 4px 4px rgba(128, 0, 128, 0.1);
+	}
+	.shadow-gray {
+		box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+	}
+</style>
