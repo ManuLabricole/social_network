@@ -18,8 +18,11 @@ class ConversationSerializer(serializers.ModelSerializer):
         now = timezone.now()  # Make it timezone-aware
         modified_at = obj.modified_at
         delta = now - modified_at
+        
+        if delta < timedelta(minutes=1):
+            return "now"
 
-        if delta < timedelta(minutes=60):
+        elif delta < timedelta(minutes=60):
             return f"{delta.seconds // 60} minutes ago"
         elif delta < timedelta(hours=24):
             return f"{delta.seconds // 3600} hours ago"
