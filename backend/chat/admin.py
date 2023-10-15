@@ -13,6 +13,14 @@ class ConversationAdmin(admin.ModelAdmin):
 # Register ConversationMessage model
 @admin.register(ConversationMessage)
 class ConversationMessageAdmin(admin.ModelAdmin):
-    list_display = ("id", "conversation", "sender", "text", "created_at", "modified_at")
+    list_display = (
+        "id",
+        "conversation",
+        "sender",
+        "receiver",
+        "body",
+        "created_at",
+        "modified_at",
+    )
     search_fields = ("text", "sender__username")
     list_filter = ("created_at", "modified_at")
