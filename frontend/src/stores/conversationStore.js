@@ -14,12 +14,14 @@ export const useConversationStore = defineStore('conversation', {
             try {
                 const response = await this.$axios.get('/api/v1/conversations/');
                 this.conversations = response.data;
+                console.log(response);
             }
             catch (err) {
                 console.log(err);
             }
             finally {
                 this.isLoading = false;
+                console.log(this.isLoading);
             }
             // Fetch conversations from API and update state
             // this.conversations = await apiCallToFetchConversations();
