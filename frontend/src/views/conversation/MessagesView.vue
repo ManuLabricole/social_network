@@ -154,7 +154,7 @@
 
 <script>
 	export default {
-		name: 'HomeView',
+		name: 'ConversationView',
 		components: {},
 		setup() {
 			return {};
