@@ -51,7 +51,6 @@
 				const users = this.conversation.user;
 				for (let i = 0; i < users.length; i++) {
 					if (users[i].user.id !== this.currentUserId) {
-						console.log('otheruser', users[i]);
 						return users[i];
 					}
 				}

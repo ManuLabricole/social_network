@@ -21,7 +21,14 @@ export const useConversationStore = defineStore('conversation', {
             try {
                 const response = await axios.get('/api/v1/users/conversations/me/');
                 this.conversations = response.data;
-                this.setSelectedConversation(this.conversations[0].id);
+
+                // Sort conversations by last modified date
+                this.conversations.sort((a, b) => new Date(b.modified_at) - new Date(a.modified_at));
+
+                // Set the most recently modified conversation as the selected one
+                if (this.conversations.length > 0) {
+                    this.setSelectedConversation(this.conversations[0].id);
+                }
             }
             catch (err) {
                 console.log(err);
