@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: '/messages',
       name: 'messages',
-      component: () => import('../views/MessagesView.vue')
+      component: () => import('../views/conversation/MessagesView.vue')
     },
     {
       path: '/search',
