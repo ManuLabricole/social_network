@@ -43,3 +43,12 @@ class ConversationMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConversationMessage
         fields = ["conversation", "sender", "receiver", "body", "created_at"]
+
+
+class CreateMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConversationMessage
+        fields = ["sender", "receiver", "conversation", "body"]
+
+    def create(self, validated_data):
+        return ConversationMessage.objects.create(**validated_data)
