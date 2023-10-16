@@ -18,6 +18,7 @@
 		<div class="bg-white border border-gray-200 rounded-lg">
 			<div class="p-4">
 				<textarea
+					v-model="messageText"
 					class="p-4 w-full bg-gray-100 rounded-lg resize-none"
 					placeholder="What do you want to say?"></textarea>
 			</div>
@@ -26,6 +27,7 @@
 				<a
 					href="#"
 					class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg"
+					@click="sendMessage"
 					>Post</a
 				>
 			</div>
@@ -42,6 +44,7 @@
 	 * @example
 	 * <ConversationView />
 	 */
+	import { ref } from 'vue';
 	import { useConversationStore } from '@/stores/conversationStore';
 	import { useUserStore } from '@/stores/user';
 	import MessageReceived from './MessageReceived.vue';
@@ -62,11 +65,28 @@
 		setup() {
 			const conversationStore = useConversationStore();
 			const userStore = useUserStore();
-			console.log(conversationStore.messages);
+			const messageText = ref(''); // Local state for the message text
+
 			return {
 				conversationStore,
 				userStore,
 			};
+		},
+		data() {
+			return {
+				messageText: '',
+			};
+	},
+		methods: {
+			/**
+			 * @name sendMessage
+			 * @description Sends a message to the active conversation.
+			 */
+			sendMessage() {
+				this.conversationStore.sendMessage(this.messageText);
+				this.messageText = '';
+				console.log('Message sent');
+			},
 		},
 	};
 </script>

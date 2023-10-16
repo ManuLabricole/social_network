@@ -50,9 +50,16 @@ export const useConversationStore = defineStore('conversation', {
                 this.isLoading = false;
             }
         },
-        async sendMessage(conversationId, message) {
-            // Send a new message
-            // await apiCallToSendMessage(conversationId, message);
+        async sendMessage(conversationId, messageBody) {
+            try {
+                await axios.post(`/api/v1/users/conversations/${conversationId}/messages/`, {
+                    body: messageBody,
+                });
+                // After successfully sending the message, refetch the messages for the conversation
+                this.fetchMessages(conversationId);
+            } catch (err) {
+                console.error('Failed to send message:', err);
+            }
         },
         setSelectedConversation(conversationId) {
             const conversation = this.conversations.find(c => c.id === conversationId);
