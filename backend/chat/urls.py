@@ -8,4 +8,9 @@ urlpatterns = [
         views.RetrieveMessagesView.as_view(),
         name="retrieve_messages",
     ),
+    path(
+        "<int:conversation_id>/messages/",
+        views.CreateMessageView.as_view(),
+        name="create_message",
+    ),
 ]

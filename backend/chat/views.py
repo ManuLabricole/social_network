@@ -40,10 +40,14 @@ class CreateMessageView(generics.CreateAPIView):
         users = conversation.user.all()
         receiver = next(user for user in users if user != sender)
 
+        # Get the body from the request data
+        body = self.request.data.get("body", "")
+
         serializer.save(
             sender=sender,
             receiver=receiver,
             conversation=conversation,
+            body=body,  # Save the body
         )
 
 

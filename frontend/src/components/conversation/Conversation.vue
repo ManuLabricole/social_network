@@ -76,14 +76,21 @@
 			return {
 				messageText: '',
 			};
-	},
+		},
 		methods: {
 			/**
 			 * @name sendMessage
 			 * @description Sends a message to the active conversation.
 			 */
 			sendMessage() {
-				this.conversationStore.sendMessage(this.messageText);
+				this.conversationStore.sendMessage(
+					// this.conversationStore.selectedConversation.id,
+					this.messageText
+				);
+				console.log(
+					'conversation ID',
+					this.conversationStore.selectedConversation.id
+				);
 				this.messageText = '';
 				console.log('Message sent');
 			},
