@@ -58,6 +58,7 @@ export const useConversationStore = defineStore('conversation', {
                 });
                 // After successfully sending the message, refetch the messages for the conversation
                 this.fetchMessages(this.selectedConversation.id);
+                this.fetchConversations();
             } catch (err) {
                 console.error('Failed to send message:', err);
             }
