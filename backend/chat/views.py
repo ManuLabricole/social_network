@@ -23,7 +23,7 @@ class RetrieveMessagesView(generics.ListAPIView):
     def get_queryset(self):
         conversation_id = self.kwargs["conversation_id"]
         conversation = get_object_or_404(Conversation, id=conversation_id)
-        messages = ConversationMessage.objects.filter(conversation=conversation)      
+        messages = ConversationMessage.objects.filter(conversation=conversation)
         return messages
 
 
@@ -33,8 +33,18 @@ class CreateMessageView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        # Logic to associate the message with a conversation and the sender
-        pass
+        conversation = Conversation.objects.get(id=self.kwargs["conversation_id"])
+        sender = self.request.user.userprofile
+
+        # Assuming the conversation's user field is a ManyToManyField with UserProfiles
+        users = conversation.user.all()
+        receiver = next(user for user in users if user != sender)
+
+        serializer.save(
+            sender=sender,
+            receiver=receiver,
+            conversation=conversation,
+        )
 
 
 # Delete a message from a conversation
