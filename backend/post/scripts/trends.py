@@ -26,5 +26,12 @@ def compute_top_hashtags():
     return top_hashtags
 
 
-top_hashtags = compute_top_hashtags()
-print(top_hashtags)
+def create_trend_model():
+    top_hashtags = compute_top_hashtags()
+    trends = Trend.objects.all()
+    for trend in trends:
+        trend.delete()
+
+    for top_hashtag in top_hashtags:
+        trend = Trend(hashtag=top_hashtag[0], count=top_hashtag[1])
+        trend.save()

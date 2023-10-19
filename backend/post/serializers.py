@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, PostAttachment, PostLike, Comment, Trends
+from .models import Post, PostAttachment, PostLike, Comment, Trend
 from userprofile.serializers import UserProfileSerializer
 
 
@@ -56,5 +56,5 @@ class PostSerializer(serializers.ModelSerializer):
 
 class TrendsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Trends
+        model = Trend
         fields = "__all__"

@@ -81,7 +81,7 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Trends(models.Model):
+class Trend(models.Model):
     hashtag = models.CharField(max_length=50)
     count = models.IntegerField(default=0)
 
