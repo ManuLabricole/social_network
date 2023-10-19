@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotFound
 
-from .models import Post, PostLike, Comment
-from .serializers import PostSerializer, CommentSerializer
+from .models import Post, PostLike, Comment, Trend
+from .serializers import PostSerializer, CommentSerializer, TrendsSerializer
+from .scripts.trends import create_trend_model
 
 
 class FeedPostsListView(generics.ListAPIView):
@@ -133,4 +134,8 @@ class ListCommentsView(generics.ListAPIView):
 
 
 class ListTrendsView(generics.ListAPIView):
-    pass
+    serializer_class = TrendsSerializer
+
+    def get_queryset(self):
+        create_trend_model()
+        return Trend.objects.all()
