@@ -30,7 +30,8 @@ class FeedPostsListView(generics.ListAPIView):
 
             # Sort the combined list by 'created_at' in descending order
             sorted_posts = sorted(
-                combined_posts, key=lambda x: x.created_at, reverse=True)
+                combined_posts, key=lambda x: x.created_at, reverse=True
+            )
 
             return sorted_posts
 
@@ -44,7 +45,7 @@ class UserPostsView(generics.ListCreateAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        user_id = self.kwargs['user_id']
+        user_id = self.kwargs["user_id"]
         return Post.objects.filter(author__user__id=user_id)
 
     def create(self, request, *args, **kwargs):
@@ -52,7 +53,9 @@ class UserPostsView(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 class PostDetailView(generics.RetrieveAPIView):
@@ -62,7 +65,7 @@ class PostDetailView(generics.RetrieveAPIView):
 
     def get_object(self):
         try:
-            return Post.objects.get(id=self.kwargs['pk'])
+            return Post.objects.get(id=self.kwargs["pk"])
         except Post.DoesNotExist:
             raise NotFound(detail="Post not found", code=404)
 
@@ -77,10 +80,9 @@ class PostLikeView(APIView):
         except Post.DoesNotExist:
             return Response({"error": "Post not found."}, status=404)
 
-        post_serializer = PostSerializer(post, context={'request': request})
+        post_serializer = PostSerializer(post, context={"request": request})
         # Check if the user has already liked the post
-        like = PostLike.objects.filter(
-            post=post, user=request.user.userprofile).first()
+        like = PostLike.objects.filter(post=post, user=request.user.userprofile).first()
 
         if like:
             # If a like exists, remove it (unlike the post)
@@ -90,11 +92,7 @@ class PostLikeView(APIView):
             PostLike.objects.create(post=post, user=request.user.userprofile)
 
         post = post_serializer.data
-        return Response(
-            {
-                "message": "Request received",
-                "post": post
-            })
+        return Response({"message": "Request received", "post": post})
 
 
 class CreateCommentView(generics.CreateAPIView):
@@ -103,14 +101,13 @@ class CreateCommentView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-
-        post = Post.objects.get(pk=self.kwargs['pk'])
+        post = Post.objects.get(pk=self.kwargs["pk"])
         print(post)
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
             print(serializer.validated_data)
-            serializer.validated_data['post'] = post
+            serializer.validated_data["post"] = post
             return super().create(request, *args, **kwargs)
         else:
             print(serializer.errors)
@@ -118,11 +115,11 @@ class CreateCommentView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         print("request", self.request.data)  # type: ignore
-        post = Post.objects.get(pk=self.kwargs['pk'])
+        post = Post.objects.get(pk=self.kwargs["pk"])
         serializer.save(
             author=self.request.user.userprofile,  # type: ignore
             post=post,
-            content=self.request.data['content']  # type: ignore
+            content=self.request.data["content"],  # type: ignore
         )
 
 
@@ -131,5 +128,9 @@ class ListCommentsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        post = Post.objects.get(pk=self.kwargs['post_id'])
+        post = Post.objects.get(pk=self.kwargs["post_id"])
         return post.comments.all()  # type: ignore
+
+
+class ListTrendsView(generics.ListAPIView):
+    pass

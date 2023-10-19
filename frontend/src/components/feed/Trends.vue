@@ -72,14 +72,20 @@
 </template>
 
 <script>
+	import axios from 'axios';
 	export default {
 		setup() {
 			return {};
 		},
+
+		mounted() {
+			this.fetchTrends();
+		},
+
 		methods: {
 			fetchTrends() {
 				axios
-					.post(`/api/v1/posts/trends`)
+					.get(`/api/v1/posts/trends`)
 					.then((response) => {
 						console.log(response.data);
 					})
