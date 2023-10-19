@@ -76,6 +76,18 @@
 		setup() {
 			return {};
 		},
+		methods: {
+			fetchTrends() {
+				axios
+					.post(`/api/v1/posts/trends`)
+					.then((response) => {
+						console.log(response.data);
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			},
+		},
 	};
 </script>
 
